@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Component;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.semanticweb.owlapi.model.AxiomType;
@@ -22,11 +20,9 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 @Component
 public class client {
-    public static List<String> classlist;
-	public static List<String> objectPropertyList;
-	public static List<String> dataPropertyList;
-	HashMap<String, String> reClass;
-	HashMap<String, String> reProperty;
+    public List<String> classlist;
+	public List<String> objectPropertyList;
+	public List<String> dataPropertyList;
 	private String path;
 	OWLOntologyManager manager=OWLManager.createOWLOntologyManager();
 	OWLOntology owl;
@@ -91,17 +87,43 @@ public class client {
 	}
 
 	public HashMap<String,String> getcr(){
-		NameConventionPanel namingPanel = new NameConventionPanel();
-	 	reClass = namingPanel.vocab(classlist);
+		HashMap<String,String> reClass=new HashMap<>();
+		// NameConventionPanel namingPanel = new NameConventionPanel();
+	 	// reClass=namingPanel.vocab(classlist);
 		return reClass;
 	}
-	public HashMap<String,String> getnr(){
-		reProperty=new HashMap<>();
-		NameConventionPanel proPanel = new NameConventionPanel();
-	 	reProperty = proPanel.vocab1(objectPropertyList);
-		return reProperty;
+	public HashMap<String, String> vocab() {
+    	HashMap<String, String>reClass = new HashMap<>();
+    	List<String>ls=new ArrayList<String>();
+	    ClassNameConvention v = new ClassNameConvention();
+	    reClass = v.classRecommendation(classlist);
+	    return reClass;
+    }
+	public HashMap<String, String> vocab1() {
+    	List<String>ls=new ArrayList<String>();
+    	HashMap<String, String>reProperty = new HashMap<>();
+  //  	if(!flag2) {
+    	ClassNameConvention v = new ClassNameConvention();    	
+    	//ls.addAll(v.propertiesRecommendation(propertylist));
+    	reProperty = v.propertiesRecommendation(objectPropertyList);
+    	
+//    	System.out.println("\n\nProperty Name\t\tRecommended Property Name");
+//    	System.out.println("=======================================================");
+//    	for(int i=0;i<ls.size();i++) {
+//    		System.out.println(propertylist.get(i)+"\t\t" +ls.get(i));
+//    	}
+//    	System.out.println("=======================================================\n");
+//    	for(int i =0;i<ls.size();i++) {
+//    		textarea.append(ls.get(i)+"\n");
+//    	}
+//    	flag2 = true;
+//    	}
+//    	return ls;
+    	//System.out.println("Recommended Property === > "+reProperty.get(property));
+    	return reProperty;
 	}
 
+	
 
-    
+
 }

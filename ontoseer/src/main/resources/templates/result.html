@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
+<!-- <head>
 <title>OntoSeer-Web</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,12 +13,23 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
 .fa-anchor,.fa-coffee {font-size:200px}
 </style>
-</head>
+</head> -->
 <body>
-    <!-- td ${message}  -->
-    <tr th:each="class: ${map}?">
-        <td th:text="${class.key}"></td>
-        <td th:text="${class.value}"></td>
-    </tr>
+    <h1 th:text="${message}"></h1>
+    <table>
+        <tr>
+          <td><strong th:text="${message1}"></strong></td>
+          <td><strong th:text="${message2}"></strong></td>
+        </tr>
+        <tr th:each="class : ${map}">
+          <td th:text="${class.key}"></td>
+          <td th:text="${class.value}"></td>
+        </tr>
+      <table>
+    <div align="right">
+      <a href="/cr"></a>Class Recommendation</a>
+      <a href="/pr">Property Recommendation</a>
+      <a href="/start">UploadAnotherFile</a>
+    </div>
 </body>
 </html>

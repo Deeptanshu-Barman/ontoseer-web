@@ -111,4 +111,3 @@ ClassAssertion(:Flavour :raita)
 DisjointClasses(:EastIndainCusine :NorthIndianCusine :SouthIndianCusine :WestIndianCusine)
 DifferentIndividuals(:bitter :sour :sweet :tangy)
 )
-        
