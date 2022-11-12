@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <title>OntoSeer-Web</title>
 <meta charset="UTF-8">
@@ -8,11 +8,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Montserrat">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
-.w3-bar,h1,button {font-family: "Montserrat", sans-serif}
-.fa-anchor,.fa-coffee {font-size:200px}
-</style>
+<link rel="stylesheet" href="tabs.css">
 </head>
 <body>
 
@@ -31,64 +27,175 @@ body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 <!-- Header -->
 <header class="w3-container w3-orange w3-center" style="padding:128px 16px">
   <h1 class="w3-margin w3-jumbo">OntoSeer</h1>
-  <p class="w3-xlarge">By KRACR_LAB</p>
-  <a href="start">
-    <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top",href="start">Get Started</button>
-  </a>
+  <h5>While building an ontology, there are several things to consider such as reusing concepts/properties 
+    from the existing ontologies, using ontology design patterns (ODPs), following the naming conventions for concepts/properties 
+    and designing a good class hierarchy. These are issues that beginner ontology engineers find hard and can be tricky for 
+    experienced ones as well. OntoSeer is a Protege plugin that overlooks the ontology 
+    that is being built in Protege and offers different types of recommendations. </h5>
+  <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top" id="bt2">Get Started</button>
+  <script>
+    function custom_scroll() {
+      window.scrollBy({ 
+        top: 400, // could be negative value
+        left: 0, 
+        behavior: 'smooth' 
+      });
+    }
+    function custom_scroll1() {
+      window.scrollBy({ 
+        top: 750, // could be negative value
+        left: 0, 
+        behavior: 'smooth' 
+      });
+    }
+    document.getElementById("bt2").addEventListener("click", custom_scroll);
+  </script>
 </header>
 
-<!-- First Grid -->
-<!-- <div class="w3-row-padding w3-padding-64 w3-container">
-  <div class="w3-content">
-    <div class="w3-twothird">
-      <h1>Lorem Ipsu</h1>
-      <h5 class="w3-padding-32">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</h5>
-
-      <p class="w3-text-grey">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-
-    <div class="w3-third w3-center">
-      <i class="fa fa-anchor w3-padding-64 w3-text-red"></i>
-    </div>
+<!-- second grid -->
+<div class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
+  <div class="tab">
+    <button class="tablinks" onclick="openupload(event, 'FileUpload')" id="defaultOpen">Upload a File</button>
+    <button class="tablinks" onclick="openupload(event, 'Paste')">Paste</button>
+    <button class="tablinks" onclick="openupload(event, 'PasteUrl')">PasteUrl</button>
   </div>
-</div> -->
-
-<!-- Second Grid -->
-<!-- <div class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
-  <div class="w3-content">
-    <div class="w3-third w3-center">
-      <i class="fa fa-coffee w3-padding-64 w3-text-red w3-margin-right"></i>
-    </div>
-
-    <div class="w3-twothird">
-      <h1>Lorem Ipsum</h1>
-      <h5 class="w3-padding-32">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</h5>
-
-      <p class="w3-text-grey">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
+  <div id="FileUpload" class="tabcontent">
+    <h3>Upload File</h3>
+    <input type="file" name="file" id="file" /><br/><br/>
+    <input type="submit" value="Submit" id='submit'/>  
   </div>
-</div> -->
+  <div id="Paste" class="tabcontent">
+    <h3>Paste</h3>
+    <form id="pasteform">
+      <textarea id="pastebin" rows = "8" cols = "80" name = "pastebin"></textarea>
+      <br/>
+    <input type="submit" value="Submit" id="submittext" />
+    </form>
+  </div>
 
-<!-- <div class="w3-container w3-black w3-center w3-opacity w3-padding-64">
-    <h1 class="w3-margin w3-xlarge">Quote of the day: live life</h1>
-</div> -->
+  <div id="PasteUrl" class="tabcontent">
+    <h3>PasteUrl</h3>
+  </div>
+  <script>
+    document.getElementById("defaultOpen").click();
+    const paste=document.getElementById('pasteform');
+    paste.addEventListener('submit',function(e){
+      e.preventDefault();
+      const payload =new FormData(paste);
+      console.log([...payload]);
+      fetch('/uploadtext', {
+      method: 'POST',
+      body: payload
+    })
+    .then(res => res.json())
+    .then(json => console.log(json))
+    .catch(err => console.error(err));
+    })
+    const input = document.getElementById('file');
+    const sub=document.getElementById("submit");
+    sub.addEventListener('click', () => {
+      alert("clicked on submit")
+      uploadFile(input.files[0])
+    })
+    const uploadFile = file => {
+    // add the file to the FormData object
+    const fd = new FormData()
+    fd.append('file', file)
+    console.log([...fd]);
+    // send `POST` request
+    fetch('/upload', {
+      method: 'POST',
+      body: fd
+    })
+    .then(res => res.json())
+    .then(json => getclass(json))
+    .catch(err => console.error(err));
+    }
+    function getclass(json){
+      console.log(json);
+      var dropdown=document.getElementById("classrecc");
+      let option;
+      for (let i=1;i<dropdown.options.length;i++){
+        dropdown.remove(i);
+      }
+      for (let i=0;i<json.length;i++){
+        option = document.createElement('option');
+        option.text = json[i];
+        option.value = json[i];
+        dropdown.add(option);
+      }
+    }
+    function openupload(evt, uploadtype) {
+      // Declare all variables
+      var i, tabcontent, tablinks;
 
-<!-- Footer -->
-<!-- <footer class="w3-container w3-padding-64 w3-center w3-opacity">  
-  <div class="w3-xlarge w3-padding-32">
-    <i class="fa fa-facebook-official w3-hover-opacity"></i>
-    <i class="fa fa-instagram w3-hover-opacity"></i>
-    <i class="fa fa-snapchat w3-hover-opacity"></i>
-    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
-    <i class="fa fa-twitter w3-hover-opacity"></i>
-    <i class="fa fa-linkedin w3-hover-opacity"></i>
- </div>
- <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
-</footer> -->
+      // Get all elements with class="tabcontent" and hide them
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
 
+      // Get all elements with class="tablinks" and remove the class "active"
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+
+      // Show the current tab, and add an "active" class to the link that opened the tab
+      document.getElementById(uploadtype).style.display = "block";
+      evt.currentTarget.className += " active";
+    }
+  </script>
+</div>
+
+<div class="w3-row-padding w3-white w3-padding-64 w3-container">
+  <div class="tab">
+    <button class="resultlinks" onclick="opentab(event, 'cr')" id="defaultresult">Class Recommendation</button>
+    <button class="resultlinks" onclick="opentab(event, 'pr')">Property Recommendation</button>
+    <button class="resultlinks" onclick="opentab(event, 'or')">ODP Recommendation</button>
+    <button class="resultlinks" onclick="opentab(event, 'ar')">Axiom Recommendation</button>
+    <button class="resultlinks" onclick="opentab(event, 'hv')">Class heirarchy validation</button>
+    <button class="resultlinks" onclick="opentab(event, 'vr')">Vocabulary Recommendation</button>
+  </div>
+  <div id="cr" class="resultcontent">
+    <select id="classrecc">
+      <option value="0">select value</option>
+    </select>
+    <p id="Classchange"></p>
+  </div>
+  <div id="pr" class="resultcontent">
+    <select onchange="getproperty(this);">
+      <option value="0">select value</option>
+    </select>
+    <p id="Propertychange"></p>
+  </div>
+  <script>
+    document.getElementById("defaultresult").click();
+    function opentab(evt, tabname) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("resultcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+      tabcontent[i].style.display = "none";
+    }
+
+   // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("resultlinks");
+    for (i = 0; i < tablinks.length; i++) {
+      tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(tabname).style.display = "block";
+    evt.currentTarget.className += " active";
+  }
+  </script>
+</div> 
+
+<div class="w3-row-padding w3-white w3-padding-64 w3-container">
+
+</div>
 </body>
 </html>

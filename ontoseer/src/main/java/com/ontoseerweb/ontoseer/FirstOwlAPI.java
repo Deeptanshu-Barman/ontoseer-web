@@ -26,7 +26,7 @@ public class FirstOwlAPI {
 	public static List<String> objectPropertyList;
 	public static List<String> dataPropertyList;
 	public  String path;
-	
+
 	public void commands() {
 		System.out.println("-h  -- Help");
 		 System.out.println("-p <Ontology file path> -cr|-pr|-or|-ar|-chr|-vr <arguments for respective recommendation>");

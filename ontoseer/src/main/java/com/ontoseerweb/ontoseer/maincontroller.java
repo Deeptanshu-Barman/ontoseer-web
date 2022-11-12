@@ -2,6 +2,9 @@ package com.ontoseerweb.ontoseer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -10,7 +13,9 @@ import java.util.Random;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.io.File;
@@ -44,19 +49,11 @@ public class maincontroller {
 	public String start(){
 		return "findex";
 	}
-    @GetMapping("/start")
-    public String start1(){
-		return "index";
-	}
     @PostMapping("/uploadtext")
-    public String tupload(@RequestParam("pastebin") String text, RedirectAttributes redirectAttributes){
-        if (text.isEmpty()) {
-            redirectAttributes.addFlashAttribute("message", "Please paste Something");
-            return "redirect:uploadStatus";
-            }
+    public @ResponseBody List<String> tupload(String pastebin){
         String fname=randomfilename();
         Path path =Paths.get(UPLOADED_FOLDER+fname);
-        byte[] arr = text.getBytes();
+        byte[] arr = pastebin.getBytes();
         try {
             Files.write(path, arr);
         }
@@ -64,32 +61,38 @@ public class maincontroller {
             System.out.print("Invalid Path");
         }
         cli.setpath(UPLOADED_FOLDER+fname);
-        return "redirect:/upload";
+        return cli.classlist;
     }
-	@PostMapping("/upload") 
-    public String singleFileUpload(@RequestParam("file") MultipartFile file,RedirectAttributes redirectAttributes) {
-
-        if (file.isEmpty()) {
-        redirectAttributes.addFlashAttribute("message", "Please select a file to upload");
-        return "redirect:uploadStatus";
-        }
+	@PostMapping("/upload")
+    public @ResponseBody List<String> fileUpload(MultipartFile file) {
+        List<String> Class_list=new ArrayList<String>();
         try {
-        // Get the file and save it somewhere
-        byte[] bytes = file.getBytes();
-        Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
-        Files.write(path, bytes);
-        cli.setpath(UPLOADED_FOLDER + file.getOriginalFilename());
-        redirectAttributes.addFlashAttribute("message",
-        "You successfully uploaded '" + cli.getpath()+ "'");
-        } catch (IOException e) {
-            e.printStackTrace();
+            // create a path from the file name
+            Path path = Paths.get(UPLOADED_FOLDER, file.getOriginalFilename());
+            Files.write(path, file.getBytes());
+            cli.setpath(UPLOADED_FOLDER+file.getOriginalFilename());
+            Class_list=cli.classlist;
         }
-        return "redirect:/upload";
+        catch (Exception ex) {
+            ex.printStackTrace();
+            Class_list.add("NA");
+            return Class_list;
+        }
+        return Class_list;
     }
-    
     @GetMapping("/upload")
     public String uploadStatus(Model model) {
-        return "upload";
+        try{
+            HashMap<String,String> Classmap=new HashMap<>();
+            HashMap<String,String> Propertymap=new HashMap<>();
+            Classmap=cli.vocab();
+            Propertymap=cli.vocab1();
+            model.addAttribute("Classmap", Classmap);
+            model.addAttribute("Propertymap",Propertymap);
+        }catch(RuntimeException e){
+            e.printStackTrace();
+        }
+        return "result";
     }
 
     @GetMapping("/cr")

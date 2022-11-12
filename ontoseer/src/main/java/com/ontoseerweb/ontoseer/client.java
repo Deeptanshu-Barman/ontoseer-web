@@ -24,6 +24,9 @@ public class client {
 	public List<String> objectPropertyList;
 	public List<String> dataPropertyList;
 	private String path;
+	public String ontology_description;
+	public String ontology_domain;
+	public String ontology_question;
 	OWLOntologyManager manager=OWLManager.createOWLOntologyManager();
 	OWLOntology owl;
 	Set<OWLEntity> ont;
