@@ -95,35 +95,50 @@ public class client {
 	 	// reClass=namingPanel.vocab(classlist);
 		return reClass;
 	}
-	public HashMap<String, String> vocab() {
+	public List<String> vocab(String classname) {
+		List<String> ans=new ArrayList<>();
     	HashMap<String, String>reClass = new HashMap<>();
-    	List<String>ls=new ArrayList<String>();
 	    ClassNameConvention v = new ClassNameConvention();
 	    reClass = v.classRecommendation(classlist);
-	    return reClass;
+		if (reClass.containsKey(classname)){
+			ans.add(reClass.get(classname));
+		}
+		if (ans.isEmpty()){
+			ans.add("NOTFOUND");
+		}
+	    return ans;
     }
-	public HashMap<String, String> vocab1() {
+	public List<String> vocab1(String propname) {
     	List<String>ls=new ArrayList<String>();
     	HashMap<String, String>reProperty = new HashMap<>();
-  //  	if(!flag2) {
     	ClassNameConvention v = new ClassNameConvention();    	
-    	//ls.addAll(v.propertiesRecommendation(propertylist));
     	reProperty = v.propertiesRecommendation(objectPropertyList);
-    	
-//    	System.out.println("\n\nProperty Name\t\tRecommended Property Name");
-//    	System.out.println("=======================================================");
-//    	for(int i=0;i<ls.size();i++) {
-//    		System.out.println(propertylist.get(i)+"\t\t" +ls.get(i));
-//    	}
-//    	System.out.println("=======================================================\n");
-//    	for(int i =0;i<ls.size();i++) {
-//    		textarea.append(ls.get(i)+"\n");
-//    	}
-//    	flag2 = true;
-//    	}
-//    	return ls;
-    	//System.out.println("Recommended Property === > "+reProperty.get(property));
-    	return reProperty;
+		if(reProperty.containsKey(propname)){
+			ls.add(reProperty.get(propname));
+		}
+		if(ls.isEmpty()){
+			ls.add("NOT FOUND");
+		}
+    	return ls;
+	}
+
+	public List<String> getodp(String desc,String domain,String Competency){
+		List<String>temp = new ArrayList<String>();
+		HashMap<String, String>reProperty = new HashMap<>();
+    	ClassNameConvention v = new ClassNameConvention();
+		HashMap<String, String>reClass = new HashMap<>();    	
+    	reProperty = v.propertiesRecommendation(objectPropertyList);
+	    reClass = v.classRecommendation(classlist);
+		for(Map.Entry<String, String> entry : reClass.entrySet()) {
+			temp.add(entry.getValue());
+		}
+		for(Map.Entry<String, String> entry : reProperty.entrySet()) {
+			temp.add(entry.getValue());
+		}
+		temp.addAll(dataPropertyList);
+		String[] str = temp.toArray(new String[0]);
+		OdpRecommendation odprcmd = new OdpRecommendation(str);
+		return odprcmd.ODP(str, desc,domain,Competency);
 	}
 
 	

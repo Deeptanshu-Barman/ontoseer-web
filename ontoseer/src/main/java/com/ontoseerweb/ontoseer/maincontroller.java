@@ -38,6 +38,14 @@ import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
 import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
+import java.io.BufferedInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.File;
+import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+
 @Controller
 public class maincontroller {
     private static String UPLOADED_FOLDER = "C://Users//Deeptanshu Barman//Desktop//ontoseer-web//ontoseer//src//uploads//";
@@ -63,6 +71,18 @@ public class maincontroller {
         cli.setpath(UPLOADED_FOLDER+fname);
         return cli.classlist;
     }
+    @PostMapping("/uploadurl")
+    public @ResponseBody List<String> urlupload(String URL){
+        String fname=randomfilename();
+        File myObj = new File(UPLOADED_FOLDER+fname);
+        try{
+            downloadUsingNIO(URL, UPLOADED_FOLDER+fname);
+        }catch(IOException e){
+            e.printStackTrace();
+        }
+        cli.setpath(UPLOADED_FOLDER+fname);
+        return cli.classlist;
+    }
 	@PostMapping("/upload")
     public @ResponseBody List<String> fileUpload(MultipartFile file) {
         List<String> Class_list=new ArrayList<String>();
@@ -80,60 +100,21 @@ public class maincontroller {
         }
         return Class_list;
     }
-    @GetMapping("/upload")
-    public String uploadStatus(Model model) {
-        try{
-            HashMap<String,String> Classmap=new HashMap<>();
-            HashMap<String,String> Propertymap=new HashMap<>();
-            Classmap=cli.vocab();
-            Propertymap=cli.vocab1();
-            model.addAttribute("Classmap", Classmap);
-            model.addAttribute("Propertymap",Propertymap);
-        }catch(RuntimeException e){
-            e.printStackTrace();
-        }
-        return "result";
+    @PostMapping("/cr")
+    public @ResponseBody List<String> getclassname(String reqclassname) {
+        return cli.vocab(reqclassname);
     }
-
-    @GetMapping("/cr")
-    public String classr(Model m){
-        try{
-            // cli.setpath(UPLOADED_FOLDER+"wine.rdf");
-            System.out.println(cli.getpath());
-            HashMap<String,String> ans=new HashMap<>();
-            ans=cli.vocab();
-            // if(ans.isEmpty()){
-            //     ans.put("test","test");
-            // }
-            // System.out.println(ans.get("test"));
-            m.addAttribute("map", ans);
-            m.addAttribute("message", "CLASS RECOMMENDATION");
-            m.addAttribute("message1", "CLASS");
-            m.addAttribute("message2", "Recommendation");
-        }catch(RuntimeException e){
-            e.printStackTrace();
-        }
-        return "result";
+    @PostMapping("/pr")
+    public @ResponseBody List<String> getpropertyname(String reqpropname) {
+        return cli.vocab1(reqpropname);
     }
     @GetMapping("/pr")
-    public String propr(Model m){
-        try{
-            // cli.setpath(UPLOADED_FOLDER+"wine.rdf");
-            System.out.println(cli.getpath());
-            HashMap<String,String> ans=new HashMap<>();
-            ans=cli.vocab1();
-            // if(ans.isEmpty()){
-            //     ans.put("test","test");
-            // }
-            // System.out.println(ans.get("test"));
-            m.addAttribute("map", ans);
-            m.addAttribute("message", "Property RECOMMENDATION");
-            m.addAttribute("message1", "property");
-            m.addAttribute("message2", "Recommendation");
-        }catch(RuntimeException e){
-            e.printStackTrace();
-        }
-        return "result";
+    public @ResponseBody List<String> propr(){
+        return cli.objectPropertyList;
+    }
+    @PostMapping("/odp")
+    public @ResponseBody List<String> getodp(String ontdesc,String ontdomain,String ontcompetency) {
+        return cli.getodp(ontdesc, ontdomain, ontcompetency);
     }
     public String randomfilename() {
         int leftLimit = 97; // letter 'a'
@@ -150,5 +131,14 @@ public class maincontroller {
     
         return generatedString;
     }
+    private static void downloadUsingNIO(String urlStr, String file) throws IOException {
+        URL url = new URL(urlStr);
+        ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+        FileOutputStream fos = new FileOutputStream(file);
+        fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+        fos.close();
+        rbc.close();
+    }
+
             
 }

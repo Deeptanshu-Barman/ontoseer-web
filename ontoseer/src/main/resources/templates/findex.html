@@ -72,13 +72,30 @@
     <input type="submit" value="Submit" id="submittext" />
     </form>
   </div>
-
   <div id="PasteUrl" class="tabcontent">
     <h3>PasteUrl</h3>
+    <form id="pasteurl">
+      <textarea id="URL" rows = "1" cols = "80" name = "URL"></textarea>
+      <br/>
+    <input type="submit" value="Submit" id="submiturl" />
+    </form>
   </div>
   <script>
     document.getElementById("defaultOpen").click();
     const paste=document.getElementById('pasteform');
+    const pasteurl =document.getElementById('pasteurl');
+    pasteurl.addEventListener('submit',function(e){
+      e.preventDefault();
+      const payload =new FormData(pasteurl);
+      console.log([...payload]);
+      fetch('/uploadurl', {
+      method: 'POST',
+      body: payload
+      })
+      .then(res => res.json())
+      .then(json => console.log(json))
+      .catch(err => console.error(err));
+    })
     paste.addEventListener('submit',function(e){
       e.preventDefault();
       const payload =new FormData(paste);
@@ -151,26 +168,124 @@
 <div class="w3-row-padding w3-white w3-padding-64 w3-container">
   <div class="tab">
     <button class="resultlinks" onclick="opentab(event, 'cr')" id="defaultresult">Class Recommendation</button>
-    <button class="resultlinks" onclick="opentab(event, 'pr')">Property Recommendation</button>
+    <button class="resultlinks" onclick="opentab(event, 'pr');getproperty()">Property Recommendation</button>
     <button class="resultlinks" onclick="opentab(event, 'or')">ODP Recommendation</button>
     <button class="resultlinks" onclick="opentab(event, 'ar')">Axiom Recommendation</button>
     <button class="resultlinks" onclick="opentab(event, 'hv')">Class heirarchy validation</button>
     <button class="resultlinks" onclick="opentab(event, 'vr')">Vocabulary Recommendation</button>
   </div>
   <div id="cr" class="resultcontent">
-    <select id="classrecc">
-      <option value="0">select value</option>
+    <select id="classrecc" onchange="setclass(this)">
+      <option value="0">select class</option>
     </select>
-    <p id="Classchange"></p>
+    <ul id="Classchange">
+    </ul>
   </div>
   <div id="pr" class="resultcontent">
-    <select onchange="getproperty(this);">
-      <option value="0">select value</option>
+    <select id="propertyrecc" onchange="setproperty(this)">
+      <option value="0">select property</option>
     </select>
-    <p id="Propertychange"></p>
+    <ul id="Propertychange">
+    </ul>
+  </div>
+  <div id="or" class="resultcontent">
+    <form id="odp">
+      <label for="desc">Description of Ontology</label><br>
+      <input type="text" id="desc" name="ontdesc" size="100"><br><br>
+      <label for="ontdomaion">Domain of Ontology</label><br>
+      <input type="text" id="domain" name="ontdomain" size="100"><br><br>
+      <label for="ontcompetency">Competency Question</label><br>
+      <input type="text" id="competency" name="ontcompetency" size="100"><br><br>
+      <input type="submit" value="Submit" id="submitodp" />
+    </form>
+    <ul id="odprecommendation">
+    </ul>
   </div>
   <script>
     document.getElementById("defaultresult").click();
+    const odp=document.getElementById('odp');
+    odp.addEventListener('submit',function(e){
+      e.preventDefault();
+      const payload =new FormData(odp);
+      console.log([...payload]);
+      fetch('/odp', {
+      method: 'POST',
+      body: payload
+      })
+      .then(res => res.json())
+      .then(json => set_odp_output(json))
+      .catch(err => console.error(err));
+    })
+    function set_odp_output(json){
+      let list=document.getElementById('odprecommendation');
+      list.innerHTML='';
+      for (let i=0;i<json.length;i++){
+        let li = document.createElement("li");
+        li.innerText = json[i];
+        list.appendChild(li);
+      }
+    }
+    function getproperty(){
+      fetch('/pr')
+      .then(res=>res.json())
+      .then(json=>get_proplist(json))
+    }
+    function setproperty(ans){
+      const fd = new FormData()
+      fd.append('reqpropname', ans.value);
+      console.log([...fd])
+      fetch('/pr', {
+      method: 'POST',
+      body: fd
+      })
+      .then(res => res.json())
+      .then(json => set_property_output(json))
+      .catch(err => console.error(err));
+      }
+    function get_proplist(json){
+      console.log(json);
+      var dropdown=document.getElementById("propertyrecc");
+      let option;
+      for (let i=1;i<dropdown.options.length;i++){
+        dropdown.remove(i);
+      }
+      for (let i=0;i<json.length;i++){
+        option = document.createElement('option');
+        option.text = json[i];
+        option.value = json[i];
+        dropdown.add(option);
+      }
+    }
+    function set_property_output(json){
+      let list=document.getElementById('Propertychange');
+      list.innerHTML='';
+      for (let i=0;i<json.length;i++){
+        let li = document.createElement("li");
+        li.innerText = json[i];
+        list.appendChild(li);
+      }
+    }
+    function setclass(ans){
+      const fd = new FormData()
+      fd.append('reqclassname', ans.value);
+      console.log([...fd])
+      fetch('/cr', {
+      method: 'POST',
+      body: fd
+      })
+      .then(res => res.json())
+      .then(json => set_class_output(json))
+      .catch(err => console.error(err));
+      }
+    function set_class_output(json){
+      let list=document.getElementById('Classchange');
+      list.innerHTML='';
+      for (let i=0;i<json.length;i++){
+        let li = document.createElement("li");
+        li.innerText = json[i];
+        list.appendChild(li);
+      }
+    }
     function opentab(evt, tabname) {
     // Declare all variables
     var i, tabcontent, tablinks;
