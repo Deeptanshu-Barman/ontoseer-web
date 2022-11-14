@@ -33,23 +33,7 @@
     experienced ones as well. OntoSeer is a Protege plugin that overlooks the ontology 
     that is being built in Protege and offers different types of recommendations. </h5>
   <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top" id="bt2">Get Started</button>
-  <script>
-    function custom_scroll() {
-      window.scrollBy({ 
-        top: 400, // could be negative value
-        left: 0, 
-        behavior: 'smooth' 
-      });
-    }
-    function custom_scroll1() {
-      window.scrollBy({ 
-        top: 750, // could be negative value
-        left: 0, 
-        behavior: 'smooth' 
-      });
-    }
-    document.getElementById("bt2").addEventListener("click", custom_scroll);
-  </script>
+  <script src="scroll.js"></script>
 </header>
 
 <!-- second grid -->
@@ -80,68 +64,8 @@
     <input type="submit" value="Submit" id="submiturl" />
     </form>
   </div>
+  <script src="uploadfile.js"></script>
   <script>
-    document.getElementById("defaultOpen").click();
-    const paste=document.getElementById('pasteform');
-    const pasteurl =document.getElementById('pasteurl');
-    pasteurl.addEventListener('submit',function(e){
-      e.preventDefault();
-      const payload =new FormData(pasteurl);
-      console.log([...payload]);
-      fetch('/uploadurl', {
-      method: 'POST',
-      body: payload
-      })
-      .then(res => res.json())
-      .then(json => console.log(json))
-      .catch(err => console.error(err));
-    })
-    paste.addEventListener('submit',function(e){
-      e.preventDefault();
-      const payload =new FormData(paste);
-      console.log([...payload]);
-      fetch('/uploadtext', {
-      method: 'POST',
-      body: payload
-    })
-    .then(res => res.json())
-    .then(json => console.log(json))
-    .catch(err => console.error(err));
-    })
-    const input = document.getElementById('file');
-    const sub=document.getElementById("submit");
-    sub.addEventListener('click', () => {
-      alert("clicked on submit")
-      uploadFile(input.files[0])
-    })
-    const uploadFile = file => {
-    // add the file to the FormData object
-    const fd = new FormData()
-    fd.append('file', file)
-    console.log([...fd]);
-    // send `POST` request
-    fetch('/upload', {
-      method: 'POST',
-      body: fd
-    })
-    .then(res => res.json())
-    .then(json => getclass(json))
-    .catch(err => console.error(err));
-    }
-    function getclass(json){
-      console.log(json);
-      var dropdown=document.getElementById("classrecc");
-      let option;
-      for (let i=1;i<dropdown.options.length;i++){
-        dropdown.remove(i);
-      }
-      for (let i=0;i<json.length;i++){
-        option = document.createElement('option');
-        option.text = json[i];
-        option.value = json[i];
-        dropdown.add(option);
-      }
-    }
     function openupload(evt, uploadtype) {
       // Declare all variables
       var i, tabcontent, tablinks;
