@@ -18,7 +18,6 @@ fetch('/upload', {
 .then(json => getclass(json))
 .catch(err => console.error(err));
 }
-document.getElementById("defaultOpen").click();
 const paste=document.getElementById('pasteform');
 const pasteurl =document.getElementById('pasteurl');
 pasteurl.addEventListener('submit',function(e){
@@ -30,7 +29,7 @@ pasteurl.addEventListener('submit',function(e){
     body: payload
     })
     .then(res => res.json())
-    .then(json => console.log(json))
+    .then(json => getclass(json))
     .catch(err => console.error(err));
 })
 paste.addEventListener('submit',function(e){
@@ -42,7 +41,7 @@ paste.addEventListener('submit',function(e){
     body: payload
 })
 .then(res => res.json())
-.then(json => console.log(json))
+.then(json => getclass(json))
 .catch(err => console.error(err));
 })
 
@@ -50,9 +49,7 @@ function getclass(json){
     console.log(json);
     var dropdown=document.getElementById("classrecc");
     let option;
-    for (let i=1;i<dropdown.options.length;i++){
-        dropdown.remove(i);
-    }
+    dropdown.innerHTML="";
     for (let i=0;i<json.length;i++){
         option = document.createElement('option');
         option.text = json[i];

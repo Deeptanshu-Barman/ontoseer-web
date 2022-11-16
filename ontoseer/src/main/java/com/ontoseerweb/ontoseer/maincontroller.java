@@ -81,6 +81,7 @@ public class maincontroller {
             e.printStackTrace();
         }
         cli.setpath(UPLOADED_FOLDER+fname);
+        System.out.println(fname);
         return cli.classlist;
     }
 	@PostMapping("/upload")
