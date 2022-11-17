@@ -1,7 +1,15 @@
 .tab {
   overflow: hidden;
   /* border: 1px solid #ccc; */
+  display:flex;
+  justify-content: center;
+  align-items: center;
   background-color: #f1f1f1;
+}
+textarea {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Style the buttons that are used to open the tab content */
@@ -27,18 +35,23 @@
 
 /* Style the tab content */
 .tabcontent {
-  display: none;
+  display:inline-block;
   padding: 6px 12px;
   /* border: 1px solid #ccc; */
   margin: auto;
+  display:flex;
+  justify-content: center;
+  align-items: center;
   width: 50%;
+  text-align: center;
+  align-content: center;
   border-top: none;
 }
 .resultcontent {
-  float: left;
   padding: 0px 12px;
-  border: 1px solid #ccc;
-  width: 70%;
+  margin: auto;
+  width: 50%;
+  text-decoration: center;
   border-left: none;
   height: 700px;
   }

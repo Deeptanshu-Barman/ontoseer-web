@@ -1,6 +1,5 @@
 const input = document.getElementById('file');
-const sub=document.getElementById("submit");
-sub.addEventListener('click', () => {
+input.addEventListener('change', () => {
     alert("clicked on submit")
     uploadFile(input.files[0])
 })

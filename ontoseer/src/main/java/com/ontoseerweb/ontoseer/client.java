@@ -31,7 +31,7 @@ public class client {
 	public String ontology_description;
 	public String ontology_domain;
 	public String ontology_question;
-	OWLOntologyManager manager=OWLManager.createOWLOntologyManager();
+	OWLOntologyManager manager;
 	OWLOntology owl;
 	Set<OWLEntity> ont;
 	Set<OWLClass> classes;
@@ -43,6 +43,7 @@ public class client {
 		this.path=path;
 		// loading the axioms
 		try{
+			manager=OWLManager.createOWLOntologyManager();
 			owl=manager.loadOntologyFromOntologyDocument(new File(this.path));
 		}
 		catch (OWLOntologyCreationException e) {
