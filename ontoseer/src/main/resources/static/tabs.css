@@ -7,11 +7,21 @@
   background-color: #f1f1f1;
 }
 textarea {
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  background-color: #f8f8f8;
+  font-size: 16px;
+  resize: none;
 }
-
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
 /* Style the buttons that are used to open the tab content */
 .tab button {
   background-color: inherit;
