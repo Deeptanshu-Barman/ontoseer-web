@@ -58,13 +58,30 @@ input[type=text] {
   border-top: none;
 }
 .resultcontent {
-  padding: 0px 12px;
+  display:inline-block;
+  padding: 6px 12px;
+  /* border: 1px solid #ccc; */
   margin: auto;
+  display: block;
+  justify-content: center;
+  align-items: center;
   width: 50%;
-  text-decoration: center;
-  border-left: none;
-  height: 700px;
+  align-content: center;
+  border-top: none;
   }
+  th, td {
+    border: 1px solid black;
+  }
+  
+  thead th {
+    width: 25%;
+  }
+  table {
+    padding-top: 100px;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+  }  
 body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 .w3-bar,h1,button {font-family: "Montserrat", sans-serif}
 .fa-anchor,.fa-coffee {font-size:200px}

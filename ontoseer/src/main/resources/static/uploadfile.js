@@ -1,10 +1,20 @@
 const input = document.getElementById('file');
+document.getElementById('loader').style.visibility='hidden';
 input.addEventListener('change', () => {
-    alert("clicked on submit")
-    uploadFile(input.files[0])
+    var filePath = input.value;
+    // Allowing file type
+    var allowedExtensions =/(\.owl|\.rdf|\.ttl|\.pdf|\.tex|\.txt|\.rtf|\.wps|\.wks|\.wpd)$/i;
+    if (!allowedExtensions.exec(filePath)) {
+        alert('Invalid file type');
+        fileInput.value = '';
+    }
+    else{
+        uploadFile(input.files[0]);
+    }
 })
 const uploadFile = file => {
 // add the file to the FormData object
+document.getElementById('loader').style.visibility='visible';
 const fd = new FormData()
 fd.append('file', file)
 console.log([...fd]);
@@ -20,6 +30,7 @@ fetch('/upload', {
 const paste=document.getElementById('pasteform');
 const pasteurl =document.getElementById('pasteurl');
 pasteurl.addEventListener('submit',function(e){
+    document.getElementById('loader').style.visibility='visible';
     e.preventDefault();
     const payload =new FormData(pasteurl);
     console.log([...payload]);
@@ -32,6 +43,7 @@ pasteurl.addEventListener('submit',function(e){
     .catch(err => console.error(err));
 })
 paste.addEventListener('submit',function(e){
+    document.getElementById('loader').style.visibility='visible';
     e.preventDefault();
     const payload =new FormData(paste);
     console.log([...payload]);
@@ -55,4 +67,8 @@ function getclass(json){
         option.value = json[i];
         dropdown.add(option);
     }
+    document.getElementById('loader').style.visibility='hidden';
+    document.getElementById("defaultresult").click();
+    document.multiselect('#classrecc').destroy();
+    document.multiselect('#classrecc').setIsEnabled(true);
 }

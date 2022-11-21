@@ -1,4 +1,3 @@
-
 const odp=document.getElementById('odp');
 odp.addEventListener('submit',function(e){
     e.preventDefault();

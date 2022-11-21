@@ -24,9 +24,9 @@ import org.semanticweb.owlapi.model.OWLOntologyCreationException;
 import org.semanticweb.owlapi.model.OWLOntologyManager;
 @Component
 public class client {
-    public List<String> classlist;
-	public List<String> objectPropertyList;
-	public List<String> dataPropertyList;
+    public List<String> classlist=new ArrayList<String>();
+	public List<String> objectPropertyList=new ArrayList<String>();;
+	public List<String> dataPropertyList=new ArrayList<String>();;
 	private String path;
 	public String ontology_description;
 	public String ontology_domain;
@@ -43,38 +43,31 @@ public class client {
 		this.path=path;
 		// loading the axioms
 		try{
+			clearall();
 			manager=OWLManager.createOWLOntologyManager();
 			owl=manager.loadOntologyFromOntologyDocument(new File(this.path));
-		}
-		catch (OWLOntologyCreationException e) {
-			e.printStackTrace();
-		}
-		//System.out.println(owl.getAxiomCount());
-		ont = owl.getSignature();
-		classes = owl.getClassesInSignature();
-		prop = owl.getObjectPropertiesInSignature();
-		dataProp = owl.getDataPropertiesInSignature();
-	    individuals = owl.getIndividualsInSignature();
-	    classlist = new ArrayList<String>();
-	    objectPropertyList = new ArrayList<String>();
-	    dataPropertyList = new ArrayList<String>();
-	         
-	    //System.out.println("\n**********#### Classes ######*************\n");
-		for(OWLClass cls : classes) {
-		//System.out.println("+: " + cls.getIRI().getShortForm());
-		classlist.add(cls.getIRI().getShortForm());
-		// System.out.println("Class "+cls);
-		
-		//System.out.println(" \tObject Property Domain");
-		for (OWLObjectPropertyDomainAxiom op : owl.getAxioms(AxiomType.OBJECT_PROPERTY_DOMAIN)) {                        
-				if (op.getDomain().equals(cls)) {   
-					for(OWLObjectProperty oop : op.getObjectPropertiesInSignature()){
-							//System.out.println("\t\t +: " + oop.getIRI().getShortForm());
-							objectPropertyList.add(oop.getIRI().getShortForm());
+			//System.out.println(owl.getAxiomCount());
+			ont = owl.getSignature();
+			classes = owl.getClassesInSignature();
+			prop = owl.getObjectPropertiesInSignature();
+			dataProp = owl.getDataPropertiesInSignature();
+	    	individuals = owl.getIndividualsInSignature();
+			//System.out.println("\n**********#### Classes ######*************\n");
+			for(OWLClass cls : classes) {
+			//System.out.println("+: " + cls.getIRI().getShortForm());
+			classlist.add(cls.getIRI().getShortForm());
+			// System.out.println("Class "+cls);
+			
+			//System.out.println(" \tObject Property Domain");
+			for (OWLObjectPropertyDomainAxiom op : owl.getAxioms(AxiomType.OBJECT_PROPERTY_DOMAIN)) {                        
+					if (op.getDomain().equals(cls)) {   
+						for(OWLObjectProperty oop : op.getObjectPropertiesInSignature()){
+								//System.out.println("\t\t +: " + oop.getIRI().getShortForm());
+								objectPropertyList.add(oop.getIRI().getShortForm());
+						}
+						//System.out.println("\t\t +: " + op.getProperty().getNamedProperty().getIRI().getShortForm());
 					}
-					//System.out.println("\t\t +: " + op.getProperty().getNamedProperty().getIRI().getShortForm());
 				}
-			}
 
 			//System.out.println(" \tData Property Domain");
 			for (OWLDataPropertyDomainAxiom dp : owl.getAxioms(AxiomType.DATA_PROPERTY_DOMAIN)) {
@@ -87,6 +80,17 @@ public class client {
 				}
 			}
 		}
+		}
+		catch (OWLOntologyCreationException e) {
+			e.printStackTrace();
+			classlist.add("couldnt load ontology");
+		}
+	}
+
+	public void clearall(){
+		classlist.clear();
+		objectPropertyList.clear();
+		dataPropertyList.clear();
 	}
 		
 	public String getpath(){
