@@ -85,6 +85,11 @@ public class maincontroller {
     }
     @GetMapping("/pr")
     public @ResponseBody List<String> propr(){
+        for (String i : cli.objectPropertyList) {
+ 
+            // Print all elements of ArrayList
+            System.out.println(i);
+        }
         return cli.objectPropertyList;
     }
     @PostMapping("/odp")

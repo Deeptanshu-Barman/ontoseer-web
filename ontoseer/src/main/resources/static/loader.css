@@ -5,3 +5,13 @@
   position:fixed;
   z-index: 1;
 }
+
+h2{
+  margin-left:3%;
+}
+
+h3{
+  text-align: justify;
+  margin-left: 3%;
+  margin-right: 3%;
+}

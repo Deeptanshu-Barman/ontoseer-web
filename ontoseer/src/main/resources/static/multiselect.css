@@ -80,6 +80,7 @@
 
 .multiselect-input-div {
 	height: 34px;
+	width: 100%;
 }
 
 	.multiselect-input-div input{
@@ -88,13 +89,14 @@
 		margin: 5px 0 6px 0;
 		padding: 5px;
 		vertical-align:middle;
+		width: 50%;
 	}
 
 .multiselect-count {
 	position: relative;
 	text-align: center;
 	border-radius: 2px;
-	background-color:#0d45a5;
+	background-color:#5a79b0;
 	display: inline-block !important;
 	padding: 2px 7px;
 	left: -45px;
@@ -121,4 +123,15 @@
 	margin-top: 17px;
 	margin-left: -42px;
 }
+
+.submit_button{
+	background-color: #0d45a5;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    cursor: pointer;
+}
+
 

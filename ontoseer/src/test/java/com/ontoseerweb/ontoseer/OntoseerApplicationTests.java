@@ -8,6 +8,7 @@ class OntoseerApplicationTests {
 
 	@Test
 	void contextLoads() {
+		
 	}
 
 }

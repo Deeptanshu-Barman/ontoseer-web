@@ -1,0 +1,113 @@
+Prefix(:=<http://www.iiitd.ac.in/winter2022/sweb/cookingrecipe#>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+
+
+Ontology(<http://www.iiitd.ac.in/winter2022/sweb/cookingrecipe>
+
+Declaration(Class(:CusineType))
+Declaration(Class(:Dish))
+Declaration(Class(:EastIndainCusine))
+Declaration(Class(:Flavour))
+Declaration(Class(:IndianCusine))
+Declaration(Class(:Ingredient))
+Declaration(Class(:ItalianCusine))
+Declaration(Class(:NorthIndianCusine))
+Declaration(Class(:Recipe))
+Declaration(Class(:SouthIndianCusine))
+Declaration(Class(:WestIndianCusine))
+Declaration(ObjectProperty(:hasCusineType))
+Declaration(ObjectProperty(:hasRecipe))
+Declaration(DataProperty(:hasServingSize))
+Declaration(NamedIndividual(:bitter))
+Declaration(NamedIndividual(:raita))
+Declaration(NamedIndividual(:sour))
+Declaration(NamedIndividual(:sweet))
+Declaration(NamedIndividual(:tangy))
+############################
+#   Object Properties
+############################
+
+# Object Property: :hasCusineType (:hasCusineType)
+
+InverseFunctionalObjectProperty(:hasCusineType)
+ObjectPropertyDomain(:hasCusineType :Dish)
+ObjectPropertyRange(:hasCusineType :CusineType)
+
+
+############################
+#   Data Properties
+############################
+
+# Data Property: :hasServingSize (:hasServingSize)
+
+DataPropertyDomain(:hasServingSize :Dish)
+DataPropertyRange(:hasServingSize xsd:nonNegativeInteger)
+
+
+
+############################
+#   Classes
+############################
+
+# Class: :Dish (:Dish)
+
+SubClassOf(:Dish ObjectSomeValuesFrom(:hasCusineType :Dish))
+SubClassOf(:Dish ObjectExactCardinality(1 :hasCusineType :Dish))
+
+# Class: :EastIndainCusine (:EastIndainCusine)
+
+SubClassOf(:EastIndainCusine :IndianCusine)
+
+# Class: :Flavour (:Flavour)
+
+EquivalentClasses(:Flavour ObjectOneOf(:bitter :sour :sweet :tangy))
+
+# Class: :IndianCusine (:IndianCusine)
+
+SubClassOf(:IndianCusine :CusineType)
+
+# Class: :ItalianCusine (:ItalianCusine)
+
+SubClassOf(:ItalianCusine :CusineType)
+
+# Class: :NorthIndianCusine (:NorthIndianCusine)
+
+SubClassOf(:NorthIndianCusine :IndianCusine)
+
+# Class: :SouthIndianCusine (:SouthIndianCusine)
+
+SubClassOf(:SouthIndianCusine :IndianCusine)
+
+# Class: :WestIndianCusine (:WestIndianCusine)
+
+SubClassOf(:WestIndianCusine :IndianCusine)
+
+
+############################
+#   Named Individuals
+############################
+
+# Individual: :bitter (:bitter)
+
+
+# Individual: :raita (:raita)
+
+ClassAssertion(:Flavour :raita)
+
+# Individual: :sour (:sour)
+
+
+# Individual: :sweet (:sweet)
+
+
+# Individual: :tangy (:tangy)
+
+
+
+DisjointClasses(:EastIndainCusine :NorthIndianCusine :SouthIndianCusine :WestIndianCusine)
+DifferentIndividuals(:bitter :sour :sweet :tangy)
+)

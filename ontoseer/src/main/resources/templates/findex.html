@@ -16,7 +16,9 @@
 <script src="multiselect.min.js"></script>
 </head>
 <body>
-  <div class="loader" id="loader"></div>
+  <div class="loader" id="loader">
+    <h1 class="w3-margin w3-jumbo w3-center w3-margin-top">Processing the Ontology</h1>
+  </div>
 <!-- Navbar -->
 <div class="w3-bar w3-black w3-card w3-large">
     <a class="w3-bar-item w3-button w3-hide-medium w3-hide-large w3-right w3-padding-large w3-hover-white w3-large w3-red" href="javascript:void(0);" onclick="myFunction()" title="Toggle Navigation Menu"><i class="fa fa-bars"></i></a>
@@ -28,7 +30,7 @@
 <!-- Header -->
 <header class="w3-container w3-orange w3-center" style="padding:128px 16px">
   <h1 class="w3-margin w3-jumbo">OntoSeer</h1>
-  <h3 style="text-align: justify;">While building an ontology, there are several things to consider such as reusing concepts/properties 
+  <h3>While building an ontology, there are several things to consider such as reusing concepts/properties 
     from the existing ontologies, using ontology design patterns (ODPs), following the naming conventions for concepts/properties 
     and designing a good class hierarchy. These are issues that beginner ontology engineers find hard and can be tricky for 
     experienced ones as well. OntoSeer is a Protege plugin that overlooks the ontology 
@@ -53,7 +55,6 @@
     </label>
   </div>
   <div id="Paste" class="tabcontent">
-    <h3>Paste</h3>
     <form id="pasteform">
       <textarea class="text-area" id="pastebin" rows = "8" cols = "100" name = "pastebin"></textarea>
       <br/>
@@ -61,7 +62,6 @@
     </form>
   </div>
   <div id="PasteUrl" class="tabcontent">
-    <h3>PasteUrl</h3>
     <form id="pasteurl">
       <input type="text" id="URL" name = "URL">
       <br/>
@@ -96,8 +96,8 @@
 <div class="w3-light-gray w3-container ">
   <h2>Results</h2>
   <div class="tab">
-    <button class="resultlinks" onclick="opentab(event, 'cr')" id="defaultresult">Class Recommendation</button>
-    <button class="resultlinks" onclick="opentab(event, 'pr');getproperty()">Property Recommendation</button>
+    <button class="resultlinks" onclick="opentab(event, 'cr')" id="defaultresult">Class Naming Recommendation</button>
+    <button class="resultlinks" onclick="opentab(event, 'pr');getproperty()">Property Naming Recommendation</button>
     <button class="resultlinks" onclick="opentab(event, 'or')">ODP Recommendation</button>
     <button class="resultlinks" onclick="opentab(event, 'ar')">Axiom Recommendation</button>
     <button class="resultlinks" onclick="opentab(event, 'hv')">Class heirarchy validation</button>
@@ -106,15 +106,14 @@
   <br>
   <br>
   <div id="cr" class="resultcontent">
-    <label for="classrecc">Select Class</label> <br>
+    <label for="classrecc">Select Class:</label>
     <select multiple="multiple" id="classrecc">
     </select>
-    <button type="button" id="submitclass">Submit</button>
+    <button type="button" class="submit_button" id="submitclass">Submit</button>
     <br><br><br>
     <table class="table ">
       <th>ClassName</th>
       <th>Recommendation</th>
-      <th>Source/IRI</th>
     </table>
     <ul id="Classchange">
     </ul>
@@ -122,11 +121,10 @@
   <div id="pr" class="resultcontent">
     <label for="propertyrecc">Select Property</label>
     <select multiple="multiple" class="w3-select" id="propertyrecc"></select>
-    <button type="button" id="submitproperty">Submit</button><br><br>
+    <button type="button" class="submit_button" id="submitproperty">Submit</button><br><br>
     <table class="table ">
       <th>PropertyName</th>
       <th>Recommendation</th>
-      <th>Source/IRI</th>
     </table>
     <ul id="Propertychange">
     </ul>
@@ -147,7 +145,7 @@
   <div id="ar" class="resultcontent">
     <label for="axiomrecc">Select Class/Property</label>
     <select multiple="multiple" class="w3-select" id="axiomrecc"></select>
-    <button type="button" id="submitaxiom">Submit</button><br><br>
+    <button type="button" class="submit_button" id="submitaxiom">Submit</button><br><br>
     <table class="table ">
       <th>Class or Property Name</th>
       <th>Recommendation</th>
@@ -156,21 +154,43 @@
   </div>
   <div id="hv" class="resultcontent">
     <form id="hval">
-      <label for="q1">Do the properties of superclass cease to exit in the future(temporal dependency)?</label>
-      <input type="checkbox" id="q1" name="q1" value="Y"><br>
-      <label for="q2">Do the properties of the sub class cease to exist in the future(temporal dependency)?</label>
-      <input type="checkbox" id="q2" name="q2" value="Y"><br>
-      <label for="q3"> Are the properties of super-class and sub-class identical?</label>
-      <input type="checkbox" id="q3" name="q3" value="Y"><br>
-      <label for="q4"> Are the properties of sub-class part of the properties whole class?</label>
-      <input type="checkbox" id="q4" name="q4" value="Y"><br>
-      <input type="submit" value="Submit" id="submithv" />
+      <table class="tableresult">
+        <tr style="border:none">
+          <td style="border:none"><label for="q1">Do the properties of superclass cease to exit in the future(temporal dependency)?</label></td>
+          <td style="border:none"><select id="q1">
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+          </select></td>
+        </tr>
+        <tr style="border:none">
+          <td style="border:none"><label for="q2" class="labelforch">Do the properties of the sub class cease to exist in the future(temporal dependency)?</label></td>
+          <td style="border:none"><select id="q2" style="float:left;">
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+          </select></td>
+        </tr>
+        <tr style="border:none">
+          <td style="border:none"><label for="q3" class="labelforch"> Are the properties of super-class and sub-class identical?</label></td>
+          <td style="border:none"><select id="q3">
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+          </select></td>
+        </tr>
+        <tr style="border:none">
+          <td style="border:none"><label for="q4" class="labelforch"> Are the properties of sub-class part of the properties whole class?</label></td>
+          <td style="border:none"><select id="q4">
+            <option value="1">Yes</option>
+            <option value="2">No</option>
+          </select></td>
+        </tr>
+      </table>
+      <input type="submit" value="Submit" id="submithv" style="align-items: flex-end;"/>
     </form>
   </div>
   <div id="vr" class="resultcontent">
     <label for="vocabrecc">Select Class/Property</label>
     <select multiple="multiple" class="w3-select" id="vocabrecc"></select>
-    <button type="button" id="submitvocab">Submit</button><br><br>
+    <button type="button" class="submit_button" id="submitvocab">Submit</button><br><br>
     <table class="table ">
       <th>Class or Property Name</th>
       <th>Source</th>
@@ -211,5 +231,16 @@
 <div class="w3-row-padding w3-light-gray w3-padding-64 w3-container">
   <h2>Download Result</h2>
 </div>
+<footer class="w3-container w3-padding-64 w3-center w3-opacity">  
+  <div class="w3-xlarge w3-padding-32">
+    <i class="fa fa-facebook-official w3-hover-opacity"></i>
+    <i class="fa fa-instagram w3-hover-opacity"></i>
+    <i class="fa fa-snapchat w3-hover-opacity"></i>
+    <i class="fa fa-pinterest-p w3-hover-opacity"></i>
+    <i class="fa fa-twitter w3-hover-opacity"></i>
+    <i class="fa fa-linkedin w3-hover-opacity"></i>
+ </div>
+ <p>Powered by <a href="https://www.w3schools.com/w3css/default.asp" target="_blank">w3.css</a></p>
+</footer>
 </body>
 </html>
