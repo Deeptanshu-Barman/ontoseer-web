@@ -69,23 +69,225 @@ input[type=text] {
   align-content: center;
   border-top: none;
   }
-  th, td {
-    border: 1px solid black;
-  }
-  
-  thead th {
-    width: 25%;
-  }
-  table {
-    padding-top: 100px;
-    border-collapse: collapse;
-    margin-left: auto;
-    margin-right: auto;
-  }
-  .tableresult{
-    border: none;
+th, td {
+  border: 1px solid black;
+}
+
+thead th {
+  width: 25%;
+}
+table {
+  padding-top: 100px;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+}
+.tableresult{
+  border: none;
+}
+.drop-container {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  width: 100%;
+  padding: 20px;
+  border-radius: 10px;
+  border: 2px dashed #555;
+  color: #444;
+  cursor: pointer;
+  transition: background .2s ease-in-out, border .2s ease-in-out;
+}
+
+.drop-container:hover {
+  background: #eee;
+  border-color: #111;
+}
+
+.drop-container:hover .drop-title {
+  color: #222;
+}
+
+.drop-title {
+  color: #444;
+  font-size: 20px;
+  font-weight: bold;
+  width: fit-content;
+  text-align: center;
+  transition: color .2s ease-in-out;
+}
+input[type=file] {
+  width: fit-content;
+  color: #444;
+  padding: 5px;
+  background: #fff;
+  border-radius: 10px;
+  border: 1px solid #555;
+}
+
+input[type=file]::file-selector-button {
+  margin-right: 20px;
+  border: none;
+  background: #0d45a5;
+  padding: 10px 20px;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  transition: background .2s ease-in-out;
+}
+
+input[type=file]::file-selector-button:hover {
+  background: #0d45a5;
+}
+input[type=button], input[type=submit], input[type=reset] {
+  background-color: #0d45a5;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-decoration: none;
+  cursor: pointer;
+  margin-left: auto;
+  margin-right: auto;
+}
+.multiselect-wrapper {
+	width: 50%;
+	display: inline-block;
+	white-space: nowrap;
+	font-size: 12px;
+	font-family: "Segoe UI", Verdana, Helvetica, Sans-Serif;
+}
+
+.multiselect-wrapper .multiselect-input {
+	width: 100%;
+	padding-right: 50px;
+}
+
+.multiselect-wrapper label {
+	display: block;
+	font-size: 12px;
+	font-weight : 600;
+}
+
+.multiselect-wrapper .multiselect-list {
+	z-index: 1;
+	position: absolute;
+	display: none;
+	background-color: white;
+	border: 1px solid grey;
+	border-bottom-left-radius: 2px;
+	border-bottom-right-radius: 2px;
+	margin-top: -2px;
+	width:23%;
+	text-align: left;
+}
+
+.multiselect-wrapper .multiselect-list.active {
+  display: block;
+}
+
+.multiselect-wrapper .multiselect-list > span {
+  font-weight: bold;
+}
+
+.multiselect-wrapper .multiselect-list .multiselect-checkbox {
+  margin-right: 2px;
+}
+
+.multiselect-wrapper .multiselect-list > span,
+.multiselect-wrapper .multiselect-list li {
+  cursor: default;
+}
+
+.multiselect-wrapper .multiselect-list {
+padding: 5px;
+min-width: 200px;
+}
+
+.multiselect-wrapper ul {
+list-style: none;
+display: block;
+position: relative;
+padding: 0px;
+margin: 0px;
+max-height: 200px;
+overflow-y: auto;
+overflow-x: hidden;
+}
+
+.multiselect-wrapper ul li {
+  padding-right: 20px;
+  display: block;
+}
+
+  .multiselect-wrapper ul li.active {
+    background-color: #0d45a5;
+    color: white;
   }
 
+  .multiselect-wrapper ul li:hover {
+    background-color: #0d45a5;
+    color: white;
+  }
+
+.multiselect-input-div {
+height: 34px;
+width: 100%;
+}
+
+.multiselect-input-div input{
+  border: 1px solid #ababab;
+  background : #fff;
+  margin: 5px 0 6px 0;
+  padding: 5px;
+  vertical-align:middle;
+  width: 50%;
+}
+
+.multiselect-count {
+	position: relative;
+	text-align: center;
+	border-radius: 2px;
+	background-color:#5a79b0;
+	display: inline-block !important;
+	padding: 2px 7px;
+	left: -45px;
+}
+
+.multiselect-wrapper.disabled .multiselect-dropdown-arrow {
+	border-top: 5px solid lightgray;
+}
+
+.multiselect-wrapper.disabled .multiselect-count {
+	background-color: lightgray;
+}
+
+.multiselect-dropdown-arrow {
+	width: 0;
+	height: 0;
+	border-left: 5px solid transparent;
+	border-right: 5px solid transparent;
+	border-top: 5px solid black;
+	position: absolute;
+	line-height: 20px;
+	text-align: center;
+	display: inline-block !important;
+	margin-top: 17px;
+	margin-left: -42px;
+}
+
+.submit_button{
+	background-color: #0d45a5;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 10px;
+    text-decoration: none;
+    cursor: pointer;
+}
   
 body,h1,h2,h3,h4,h5,h6 {font-family: "Lato", sans-serif}
 .w3-bar,h1,button {font-family: "Montserrat", sans-serif}

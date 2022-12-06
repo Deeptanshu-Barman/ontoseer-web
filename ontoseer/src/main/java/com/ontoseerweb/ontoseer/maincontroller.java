@@ -30,6 +30,10 @@ public class maincontroller {
 	public String start(){
 		return "findex";
 	}
+    @GetMapping("/about")
+	public String about(){
+		return "aboutus";
+	}
     @PostMapping("/uploadtext")
     public @ResponseBody List<String> tupload(String pastebin){
         String fname=randomfilename();
