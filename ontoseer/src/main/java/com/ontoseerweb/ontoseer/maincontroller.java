@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.io.FileOutputStream;
 import java.net.URL;
@@ -21,7 +25,7 @@ import java.nio.channels.ReadableByteChannel;
 
 @Controller
 public class maincontroller {
-    private static String UPLOADED_FOLDER = "C://Users//Deeptanshu Barman//Desktop//ontoseer-web//ontoseer//src//uploads//";
+    private static String UPLOADED_FOLDER = "C:/Users/Deeptanshu Barman/Desktop/ontoseer-web/ontoseer/src/uploads/";
 
     @Autowired
     public client cli;
@@ -46,7 +50,7 @@ public class maincontroller {
             System.out.print("Invalid Path");
         }
         cli.setpath(UPLOADED_FOLDER+fname);
-        return cli.classlist;
+        return Collections.emptyList();
     }
     @PostMapping("/uploadurl")
     public @ResponseBody List<String> urlupload(String URL){
@@ -60,7 +64,7 @@ public class maincontroller {
         }
         cli.setpath(UPLOADED_FOLDER+fname);
         System.out.println(fname);
-        return cli.classlist;
+        return cli.getclasslist();
     }
 	@PostMapping("/upload")
     public @ResponseBody List<String> fileUpload(MultipartFile file) {
@@ -70,35 +74,45 @@ public class maincontroller {
             Path path = Paths.get(UPLOADED_FOLDER, file.getOriginalFilename());
             Files.write(path, file.getBytes());
             cli.setpath(UPLOADED_FOLDER+file.getOriginalFilename());
-            Class_list=cli.classlist;
         }
         catch (Exception ex) {
             ex.printStackTrace();
             Class_list.add("NA");
-            return Class_list;
+            return cli.getclasslist();
         }
-        return Class_list;
+        return cli.getclasslist();
     }
     @PostMapping("/cr")
-    public @ResponseBody List<String> getclassname(String reqclassname) {
-        return cli.vocab(reqclassname);
+    public @ResponseBody HashMap<String,List<String>> getclassname(String ClassList) {
+        return cli.resultofclass(ClassList);
     }
     @PostMapping("/pr")
-    public @ResponseBody List<String> getpropertyname(String reqpropname) {
-        return cli.vocab1(reqpropname);
+    public @ResponseBody HashMap<String,List<String>> getpropertyname(String reqpropname) {
+        return cli.resultofprop(reqpropname);
     }
     @GetMapping("/pr")
     public @ResponseBody List<String> propr(){
-        for (String i : cli.objectPropertyList) {
- 
-            // Print all elements of ArrayList
-            System.out.println(i);
-        }
-        return cli.objectPropertyList;
+        return cli.getpropertylist();
+    }
+    @GetMapping("/ar")
+    public @ResponseBody List<String> axiomr(){
+        return cli.getaxiomlist();
+    }
+    @GetMapping("/vr")
+    public @ResponseBody List<String> vocabr(){
+        return cli.getaxiomlist();
+    }
+    @PostMapping("/vr")
+    public @ResponseBody HashMap<String,List<List<String>>> getavocab(String reqvocab){
+        return cli.resultofvocab(reqvocab);
+    }
+    @PostMapping("/ar")
+    public @ResponseBody HashMap<String,HashMap<String,String>> getaxiom(String reqaxiom){
+        return cli.resultofaxiom(reqaxiom);
     }
     @PostMapping("/odp")
-    public @ResponseBody List<String> getodp(String ontdesc,String ontdomain,String ontcompetency) {
-        return cli.getodp(ontdesc, ontdomain, ontcompetency);
+    public @ResponseBody List<List<String>> getodp(String ontdesc,String ontdomain,String ontcompetency) {
+        return cli.resultofodp(ontdesc,ontdomain,ontcompetency);
     }
     public String randomfilename() {
         int leftLimit = 97; // letter 'a'
@@ -123,6 +137,5 @@ public class maincontroller {
         fos.close();
         rbc.close();
     }
-
             
 }

@@ -1,156 +1,164 @@
 package com.ontoseerweb.ontoseer;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import org.springframework.stereotype.Component;
+import kracr.iiitd.ontoseer.Ontoseer;
 
-import owlapi.tutorial.msc.ClassNameConvention;
-import owlapi.tutorial.msc.OdpRecommendation;
-
-import org.semanticweb.owlapi.apibinding.OWLManager;
-import org.semanticweb.owlapi.model.AxiomType;
-import org.semanticweb.owlapi.model.OWLClass;
-import org.semanticweb.owlapi.model.OWLDataProperty;
-import org.semanticweb.owlapi.model.OWLDataPropertyDomainAxiom;
-import org.semanticweb.owlapi.model.OWLEntity;
-import org.semanticweb.owlapi.model.OWLNamedIndividual;
-import org.semanticweb.owlapi.model.OWLObjectProperty;
-import org.semanticweb.owlapi.model.OWLObjectPropertyDomainAxiom;
-import org.semanticweb.owlapi.model.OWLOntology;
-import org.semanticweb.owlapi.model.OWLOntologyCreationException;
-import org.semanticweb.owlapi.model.OWLOntologyManager;
 @Component
 public class client {
-    public List<String> classlist=new ArrayList<String>();
-	public List<String> objectPropertyList=new ArrayList<String>();;
-	public List<String> dataPropertyList=new ArrayList<String>();;
-	private String path;
-	public String ontology_description;
-	public String ontology_domain;
-	public String ontology_question;
-	OWLOntologyManager manager;
-	OWLOntology owl;
-	Set<OWLEntity> ont;
-	Set<OWLClass> classes;
-	Set<OWLObjectProperty> prop;
-	Set<OWLDataProperty> dataProp;
-	Set<OWLNamedIndividual> individuals;
-	
+   	public Ontoseer instance;
 	public void setpath(String path){
-		this.path=path;
-		// loading the axioms
-		try{
-			clearall();
-			manager=OWLManager.createOWLOntologyManager();
-			owl=manager.loadOntologyFromOntologyDocument(new File(this.path));
-			//System.out.println(owl.getAxiomCount());
-			ont = owl.getSignature();
-			classes = owl.getClassesInSignature();
-			prop = owl.getObjectPropertiesInSignature();
-			dataProp = owl.getDataPropertiesInSignature();
-	    	individuals = owl.getIndividualsInSignature();
-			//System.out.println("\n**********#### Classes ######*************\n");
-			for(OWLClass cls : classes) {
-			//System.out.println("+: " + cls.getIRI().getShortForm());
-			classlist.add(cls.getIRI().getShortForm());
-			// System.out.println("Class "+cls);
-			
-			//System.out.println(" \tObject Property Domain");
-			for (OWLObjectPropertyDomainAxiom op : owl.getAxioms(AxiomType.OBJECT_PROPERTY_DOMAIN)) {                        
-					if (op.getDomain().equals(cls)) {   
-						for(OWLObjectProperty oop : op.getObjectPropertiesInSignature()){
-								//System.out.println("\t\t +: " + oop.getIRI().getShortForm());
-								objectPropertyList.add(oop.getIRI().getShortForm());
-						}
-						//System.out.println("\t\t +: " + op.getProperty().getNamedProperty().getIRI().getShortForm());
-					}
-				}
+		Ontoseer ins=new Ontoseer();
+		ins.path=path;
+		ins.parseOntology();
+		ins.reClass = new HashMap<>();
+		ins.reProperty = new HashMap<>();
+		instance=ins;
+		System.out.println("OK");
+	}
 
-			//System.out.println(" \tData Property Domain");
-			for (OWLDataPropertyDomainAxiom dp : owl.getAxioms(AxiomType.DATA_PROPERTY_DOMAIN)) {
-				if (dp.getDomain().equals(cls)) {   
-					for(OWLDataProperty odp : dp.getDataPropertiesInSignature()){
-							//System.out.println("\t\t +: " + odp.getIRI().getShortForm());
-							dataPropertyList.add(odp.getIRI().getShortForm());
-					}
-					//System.out.println("\t\t +:" + dp.getProperty());
-				}
+	public List<String> getclasslist(){
+		return Ontoseer.classlist;
+	}
+
+	public HashMap<String,List<List<String>>> resultofvocab(String vocab){
+		instance.argIndx=3;
+		String a=" -vr ";
+		a="-p"+" "+instance.path.substring(34)+a;
+		String b=vocab.replace(',',' ');
+		String q=a+b;
+		System.out.println(q);
+		String[] words = q.split(" ");
+		instance.arguments=words;
+		instance.argLength=words.length;
+		HashMap<String,List<List<String>>>result=new HashMap<>();
+		for(int i=3;i<instance.argLength;i++){
+			instance.argIndx=i;
+			List<List<String>> res=instance.vocabularyRecommendation();
+			result.put(words[i],res);
+		}
+		System.out.println(result.size());
+		return result;
+	}
+	
+	public List<String> getaxiomlist(){
+		List<String> result=new ArrayList<>();
+		result.addAll(Ontoseer.classlist);
+		result.addAll(Ontoseer.objectPropertyList);
+		result.addAll(Ontoseer.dataPropertyList);
+		return result;
+	}
+	public HashMap<String,HashMap<String,String>> resultofaxiom(String axioms){
+		instance.argIndx=3;
+		String a=" -ar ";
+		a="-p"+" "+instance.path.substring(34)+a;
+		String b=axioms.replace(',',' ');
+		String q=a+b;
+		System.out.println(q);
+		String[] words = q.split(" ");
+		instance.arguments=words;
+		instance.argLength=words.length;
+		HashMap<String,HashMap<String,String>>result=new HashMap<>();
+		for(int i=3;i<instance.argLength;i++){
+			instance.argIndx=i;
+			HashMap<String,HashMap<String,String>>result1 = instance.axiomRecommendation();
+			result.putAll(result1);
+		}
+		System.out.println(result.size());
+		for(Map.Entry<String, HashMap<String,String>>mp : result.entrySet()) {
+			System.out.println(mp.getKey());
+			for(Map.Entry<String, String>submp : mp.getValue().entrySet()) {
+				System.out.println("\t+"+submp.getKey()+"\t"+submp.getValue());
 			}
 		}
-		}
-		catch (OWLOntologyCreationException e) {
-			e.printStackTrace();
-			classlist.add("couldnt load ontology");
-		}
+		return result;
 	}
 
-	public void clearall(){
-		classlist.clear();
-		objectPropertyList.clear();
-		dataPropertyList.clear();
-	}
-		
-	public String getpath(){
-		System.out.println(this.path);
-		return this.path;
+	public List<String> getpropertylist(){
+		List<String> result=new ArrayList<>();
+		result.addAll(Ontoseer.objectPropertyList);
+		result.addAll(Ontoseer.dataPropertyList);
+		return result;
 	}
 
-	public HashMap<String,String> getcr(){
-		HashMap<String,String> reClass=new HashMap<>();
-		// NameConventionPanel namingPanel = new NameConventionPanel();
-	 	// reClass=namingPanel.vocab(classlist);
-		return reClass;
-	}
-	public List<String> vocab(String classname) {
-		List<String> ans=new ArrayList<>();
-    	HashMap<String, String>reClass = new HashMap<>();
-	    ClassNameConvention v = new ClassNameConvention();
-	    reClass = v.classRecommendation(classlist);
-		if (reClass.containsKey(classname)){
-			ans.add(reClass.get(classname));
+	public HashMap <String,List<String>> resultofprop(String property){
+		instance.argIndx=3;
+		String a=" -pr ";
+		a="-p"+" "+instance.path.substring(34)+a;
+		String b=property.replace(',',' ');
+		String q=a+b;
+		System.out.println(q);
+		String[] words = q.split(" ");
+		instance.arguments=words;
+		instance.argLength=words.length;
+		HashMap<String,List<String>> ans=instance.classNameRecommendation();
+		List<String> ans1=new ArrayList<>();
+		for(Map.Entry<String, List<String>> mp : ans.entrySet()) {
+			ans1.add(mp.getKey()+":"+mp.getValue());
+			System.out.println(mp.getKey());
+			System.out.println("\t+"+mp.getValue());
 		}
-		if (ans.isEmpty()){
-			ans.add("NOTFOUND");
-		}
-	    return ans;
-    }
-	public List<String> vocab1(String propname) {
-    	List<String>ls=new ArrayList<String>();
-    	HashMap<String, String>reProperty = new HashMap<>();
-    	ClassNameConvention v = new ClassNameConvention();    	
-    	reProperty = v.propertiesRecommendation(objectPropertyList);
-		if(reProperty.containsKey(propname)){
-			ls.add(reProperty.get(propname));
-		}
-		if(ls.isEmpty()){
-			ls.add("NOT FOUND");
-		}
-    	return ls;
+		return ans;
 	}
 
-	public List<String> getodp(String desc,String domain,String Competency){
-		List<String>temp = new ArrayList<String>();
-		HashMap<String, String>reProperty = new HashMap<>();
-    	ClassNameConvention v = new ClassNameConvention();
-		HashMap<String, String>reClass = new HashMap<>();    	
-    	reProperty = v.propertiesRecommendation(objectPropertyList);
-	    reClass = v.classRecommendation(classlist);
-		for(Map.Entry<String, String> entry : reClass.entrySet()) {
-			temp.add(entry.getValue());
+	public HashMap<String,List<String>> resultofclass(String Class){
+		instance.argIndx=3;
+		String a=" -cr ";
+		a="-p"+" "+instance.path.substring(34)+a;
+		String b=Class.replace(',',' ');
+		String q=a+b;
+		System.out.println(q);
+		String[] words = q.split(" ");
+		instance.arguments=words;
+		instance.argLength=words.length;
+		HashMap<String,List<String>> ans=instance.propertyNameRecommendation();
+		List<String> ans1=new ArrayList<>();
+		for(Map.Entry<String, List<String>> mp : ans.entrySet()) {
+			ans1.add(mp.getKey()+":"+mp.getValue());
+			System.out.println(mp.getKey());
+			System.out.println("\t+"+mp.getValue());
 		}
-		for(Map.Entry<String, String> entry : reProperty.entrySet()) {
-			temp.add(entry.getValue());
-		}
-		temp.addAll(dataPropertyList);
-		String[] str = temp.toArray(new String[0]);
-		OdpRecommendation odprcmd = new OdpRecommendation(str);
-		return odprcmd.ODP(str, desc,domain,Competency);
+		return ans;
 	}
 
-	
-
-
+	public List<List<String>> resultofodp(String ontdesc,String ontdomain,String ontcompetency){
+		instance.argIndx=3;
+		String a=" -or ";
+		a="-p"+" "+instance.path.substring(34)+a;
+		if(ontdesc!=""){
+			a=a+ontdesc+" ";
+		}
+		if(ontdomain!=""){
+			a=a+ontdomain+" ";
+		}
+		if(ontcompetency!=""){
+			a=a+ontcompetency;
+		}
+		String q=a;
+		System.out.println(q);
+		String[] words = q.split(" ");
+		instance.arguments=words;
+		instance.argLength=words.length;
+		List<List<String>> recommendedODP=new ArrayList<>();
+		if((instance.argIndx+2)<instance.argLength && !instance.isPresent(words[instance.argIndx+2])) {
+			recommendedODP = instance.odpRecommendation();
+			instance.argIndx = instance.argIndx+3;
+	   }
+		else {
+			recommendedODP = instance.odpRecommendation();
+			instance.argIndx +=2;
+		}
+		// List<String>ls1 = recommendedODP.get(0);
+		// List<String>ls2 = recommendedODP.get(1);
+		// System.out.println("\t1. "+ls1.get(0).toString()+"\n"+"\tIRI: "+ls2.get(0)+"\n"+"\n"+"\t2. "+ls1.get(1).toString()+"\n"+"\tIRI: "+
+		// ls2.get(1)+"\n"+"\n"+"\t3. "+ls1.get(2).toString()+"\n"+"\tIRI: "+ls2.get(2)+"\n"+"\n"+"\t4. "+ls1.get(3).toString()+"\n"+"\tIRI: "+
+		// ls2.get(3));
+		return recommendedODP;
+	}
 }

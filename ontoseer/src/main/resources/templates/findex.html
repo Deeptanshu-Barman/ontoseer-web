@@ -12,7 +12,6 @@
 <link rel="stylesheet" href="tabs.css">
 <link rel="stylesheet" href="footer.css">
 <link rel="stylesheet" href="loader.css">
-<link href="multiselect.css" rel="stylesheet">
 <script src="multiselect.min.js"></script>
 </head>
 <body>
@@ -99,9 +98,9 @@
     <button class="resultlinks" onclick="opentab(event, 'cr')" id="defaultresult">Class Naming Recommendation</button>
     <button class="resultlinks" onclick="opentab(event, 'pr');getproperty()">Property Naming Recommendation</button>
     <button class="resultlinks" onclick="opentab(event, 'or')">ODP Recommendation</button>
-    <button class="resultlinks" onclick="opentab(event, 'ar')">Axiom Recommendation</button>
-    <button class="resultlinks" onclick="opentab(event, 'hv')">Class heirarchy validation</button>
-    <button class="resultlinks" onclick="opentab(event, 'vr')">Vocabulary Recommendation</button>
+    <button class="resultlinks" onclick="opentab(event, 'ar');getaxiom()">Axiom Recommendation</button>
+    <button class="resultlinks" onclick="opentab(event, 'hv');">Class heirarchy validation</button>
+    <button class="resultlinks" onclick="opentab(event, 'vr');getvocab();">Vocabulary Recommendation</button>
   </div>
   <br>
   <br>
@@ -111,46 +110,48 @@
     </select>
     <button type="button" class="submit_button" id="submitclass">Submit</button>
     <br><br><br>
-    <table class="table ">
-      <th>ClassName</th>
-      <th>Recommendation</th>
+    <table class="table" id="Classtable">
+      <thead><th>ClassName</th><th>Recommendation</th></thead>
     </table>
-    <ul id="Classchange">
-    </ul>
+    <h6> Table Shows a max of 20 entries. For more results click on Download</h6>
   </div>
   <div id="pr" class="resultcontent">
     <label for="propertyrecc">Select Property</label>
     <select multiple="multiple" class="w3-select" id="propertyrecc"></select>
     <button type="button" class="submit_button" id="submitproperty">Submit</button><br><br>
-    <table class="table ">
+    <table class="table " id="proptable">
       <th>PropertyName</th>
       <th>Recommendation</th>
     </table>
-    <ul id="Propertychange">
-    </ul>
+    <h6> Table Shows a max of 20 entries. For more results click on Download</h6>
   </div>
   <div id="or" class="resultcontent">
     <form id="odp">
       <label for="desc">Description of Ontology</label><br>
-      <input type="text" id="desc" name="ontdesc" size="100"><br><br>
+      <input required type="text" id="desc" name="ontdesc" size="100"><br><br>
       <label for="ontdomaion">Domain of Ontology</label><br>
-      <input type="text" id="domain" name="ontdomain" size="100"><br><br>
+      <input required type="text" id="domain" name="ontdomain" size="100"><br><br>
       <label for="ontcompetency">Competency Question</label><br>
       <input type="text" id="competency" name="ontcompetency" size="100"><br><br>
       <input type="submit" value="Submit" id="submitodp" />
     </form>
-    <ul id="odprecommendation">
-    </ul>
+    <br><br>
+    <table class="table " id="odptable">
+      <th style="width:35%">Class/Property Name</th>
+      <th>IRI</th>
+    </table>
+    <h6> Table Shows a max of 20 entries. For more results click on Download</h6>
   </div>
   <div id="ar" class="resultcontent">
     <label for="axiomrecc">Select Class/Property</label>
     <select multiple="multiple" class="w3-select" id="axiomrecc"></select>
     <button type="button" class="submit_button" id="submitaxiom">Submit</button><br><br>
-    <table class="table ">
+    <table class="table " id="axiomtable">
       <th>Class or Property Name</th>
       <th>Recommendation</th>
       <th>Source/IRI</th>
     </table>
+    <h6> Table Shows a max of 20 entries. For more results click on Download</h6>
   </div>
   <div id="hv" class="resultcontent">
     <form id="hval">
@@ -185,7 +186,7 @@
         </tr>
         <tr style="border:none">
           <td style="border:none">
-          <input type="submit" value="Submit" id="submithv"/>
+            <button type="button" class="submit_button" id="submithv">Submit</button>
           </td>
         </tr>
       </table>
@@ -195,7 +196,7 @@
     <label for="vocabrecc">Select Class/Property</label>
     <select multiple="multiple" class="w3-select" id="vocabrecc"></select>
     <button type="button" class="submit_button" id="submitvocab">Submit</button><br><br>
-    <table class="table ">
+    <table class="table " id="vocabtable">
       <th>Class or Property Name</th>
       <th>Source</th>
       <th>IRI</th>
@@ -231,6 +232,9 @@
   <script src="classlist.js"></script>
   <script src="odp.js"></script>
   <script src="property.js"></script>
+  <script src="axiom.js"></script>
+  <script src="vocab.js"></script>
+  <script src="classheir.js"></script>
 </div> 
 <div class="w3-row-padding w3-light-gray w3-padding-64 w3-container">
   <h2>Download Result</h2>

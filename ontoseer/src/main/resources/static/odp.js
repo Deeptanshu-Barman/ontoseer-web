@@ -12,11 +12,23 @@ odp.addEventListener('submit',function(e){
     .catch(err => console.error(err));
 })
 function set_odp_output(json){
-    let list=document.getElementById('odprecommendation');
-    list.innerHTML='';
-    for (let i=0;i<json.length;i++){
-        let li = document.createElement("li");
-        li.innerText = json[i];
-        list.appendChild(li);
+    console.log(json);
+    let table=document.getElementById('odptable');
+    for(let i = 1;i<table.rows.length;){
+      table.deleteRow(i);
     }
+    let count=0;
+    let name=json[0];
+    let iri=json[1];
+    for(let i=0;i<name.length;i++){
+        if(count<20){
+        const row=table.insertRow();
+        const cls=row.insertCell(0);
+        cls.innerHTML=name[i];
+        const rec=row.insertCell(1);
+        rec.innerHTML=iri[i];
+        count++
+        }
+    }
+    console.log("done");
 }
