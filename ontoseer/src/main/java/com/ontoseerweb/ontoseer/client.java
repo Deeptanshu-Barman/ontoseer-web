@@ -1,17 +1,22 @@
 package com.ontoseerweb.ontoseer;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
+
+import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.stereotype.Component;
 import kracr.iiitd.ontoseer.Ontoseer;
 
 @Component
 public class client {
+	public String downloadpath="C:/Users/Deeptanshu Barman/Desktop/ontoseer-web/ontoseer/src/downloads/";
    	public Ontoseer instance;
 	public void setpath(String path){
 		Ontoseer ins=new Ontoseer();
@@ -26,8 +31,33 @@ public class client {
 	public List<String> getclasslist(){
 		return Ontoseer.classlist;
 	}
-	public String getpdf(){
-		
+	public String randomfilename() {
+        int leftLimit = 97; // letter 'a'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+        StringBuilder buffer = new StringBuilder(targetStringLength);
+        for (int i = 0; i < targetStringLength; i++) {
+            int randomLimitedInt = leftLimit + (int) 
+              (random.nextFloat() * (rightLimit - leftLimit + 1));
+            buffer.append((char) randomLimitedInt);
+        }
+        String generatedString = buffer.toString();
+    
+        return generatedString;
+    }
+	public String getpdf() throws IOException{
+		PDDocument document = new PDDocument();    
+       
+      //Saving the document
+	  String downloadfile=downloadpath+randomfilename()+".pdf";
+      document.save(downloadfile);
+         
+      System.out.println("PDF created");  
+    
+      //Closing the document  
+      document.close();
+	  return downloadfile;
 	}
 
 	public String heirarchyValidation(String q1,String q2,String q3,String q4){

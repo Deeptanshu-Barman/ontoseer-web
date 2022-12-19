@@ -129,8 +129,8 @@ public class maincontroller {
         return ans;
     }
 
-    @GetMapping("download")
-    public ResponseEntity downloadFileFromLocal() {
+    @GetMapping("/download")
+    public ResponseEntity downloadFileFromLocal() throws IOException {
         String fileName=cli.getpdf();
         Path path = Paths.get(fileName);
         UrlResource resource = null;
