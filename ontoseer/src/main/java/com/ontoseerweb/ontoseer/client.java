@@ -28,6 +28,14 @@ public class client {
 	public HashMap<String,List<List<String>>> printvocab;
 	public List<List<String>> printodp;
 	public String printvalid;
+	public void settonull(){
+		printclassname=null;
+		printpropname=null;
+		printaxiom=null;
+		printvocab=null;
+		printodp=null;
+		printvalid=null;
+	}
 	public void clean(String path,String ext){
 		File folder = new File(path);
         if (folder.exists()) {
@@ -44,6 +52,7 @@ public class client {
         }
 	}
 	public void setpath(String path){
+		settonull();
 		clean(downloadpath,".pdf");
 		Ontoseer ins=new Ontoseer();
 		ins.path=path;
