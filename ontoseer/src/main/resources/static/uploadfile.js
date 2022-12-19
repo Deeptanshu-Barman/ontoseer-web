@@ -58,7 +58,10 @@ paste.addEventListener('submit',function(e){
 
 function getclass(json){
     console.log(json);
-    var dropdown=document.getElementById("classrecc");
+    if (json.length==0){
+        alert("Unable to Process your Ontology");
+    }
+    let dropdown=document.getElementById("classrecc");
     let option;
     dropdown.innerHTML="";
     for (let i=0;i<json.length;i++){

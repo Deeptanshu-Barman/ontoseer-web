@@ -12,4 +12,17 @@ submit.addEventListener('click',()=>{
   fd.append('q3',ans3.value);
   fd.append('q4',ans4.value);
   console.log([...fd]);
+  fetch('/hv', {
+    method: 'POST',
+    body: fd
+    })
+    .then(res => res.json())
+    .then(json => setheir(json))
+    .catch(err => console.error(err));
 })
+function setheir(json){
+  let result=document.getElementById('resultofhv');
+  result.innerHTML="";
+  result.innerHTML=json[0];
+}
+

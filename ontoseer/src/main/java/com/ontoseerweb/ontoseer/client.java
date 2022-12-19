@@ -26,6 +26,30 @@ public class client {
 	public List<String> getclasslist(){
 		return Ontoseer.classlist;
 	}
+	public String getpdf(){
+		
+	}
+
+	public String heirarchyValidation(String q1,String q2,String q3,String q4){
+		instance.argIndx=3;
+		String a=" -chr ";
+		a ="-p"+" "+instance.path.substring(34)+a;
+		if(q1.equals("1")){a=a+"Y ";}
+		else{a=a+"N ";}
+		if(q2.equals("1")){a=a+"Y ";}
+		else{a=a+"N ";}
+		if(q3.equals("1")){a=a+"Y ";}
+		else{a=a+"N ";}
+		if(q4.equals("1")){a=a+"Y ";}
+		else{a=a+"N ";}
+		System.out.println(a);
+		String[] words = a.split(" ");
+		instance.arguments=words;
+		instance.argLength=words.length;
+		String b=instance.classHierarchyValidation();
+		System.out.println(b);
+		return b;
+	}
 
 	public HashMap<String,List<List<String>>> resultofvocab(String vocab){
 		instance.argIndx=3;

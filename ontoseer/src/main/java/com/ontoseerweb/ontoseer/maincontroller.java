@@ -1,5 +1,11 @@
 package com.ontoseerweb.ontoseer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ServerProperties.Tomcat.Resource;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,6 +18,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,6 +26,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.io.FileOutputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.ReadableByteChannel;
@@ -113,6 +121,28 @@ public class maincontroller {
     @PostMapping("/odp")
     public @ResponseBody List<List<String>> getodp(String ontdesc,String ontdomain,String ontcompetency) {
         return cli.resultofodp(ontdesc,ontdomain,ontcompetency);
+    }
+    @PostMapping("/hv")
+    public @ResponseBody List<String> gethv(String q1,String q2,String q3,String q4) {
+        List<String>ans =new ArrayList<String>();
+        ans.add(cli.heirarchyValidation(q1,q2,q3,q4));
+        return ans;
+    }
+
+    @GetMapping("download")
+    public ResponseEntity downloadFileFromLocal() {
+        String fileName=cli.getpdf();
+        Path path = Paths.get(fileName);
+        UrlResource resource = null;
+        try {
+            resource = new UrlResource(path.toUri());
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
     }
     public String randomfilename() {
         int leftLimit = 97; // letter 'a'
