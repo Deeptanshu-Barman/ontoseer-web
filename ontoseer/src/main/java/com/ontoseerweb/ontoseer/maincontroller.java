@@ -48,7 +48,8 @@ public class maincontroller {
 	}
     @PostMapping("/uploadtext")
     public @ResponseBody List<String> tupload(String pastebin){
-        String fname=randomfilename();
+        cli.clean(UPLOADED_FOLDER,".owl");
+        String fname=randomfilename()+".owl";
         Path path =Paths.get(UPLOADED_FOLDER+fname);
         byte[] arr = pastebin.getBytes();
         try {
@@ -63,6 +64,7 @@ public class maincontroller {
     @PostMapping("/uploadurl")
     public @ResponseBody List<String> urlupload(String URL){
         String fname=randomfilename();
+        cli.clean(UPLOADED_FOLDER,".owl");
         File myObj = new File(UPLOADED_FOLDER+fname);
         fname=fname+".owl";
         try{
@@ -76,6 +78,8 @@ public class maincontroller {
     }
 	@PostMapping("/upload")
     public @ResponseBody List<String> fileUpload(MultipartFile file) {
+        cli.clean(UPLOADED_FOLDER,".owl");
+        cli.clean(UPLOADED_FOLDER,".rdf");
         List<String> Class_list=new ArrayList<String>();
         try {
             // create a path from the file name

@@ -2,23 +2,49 @@ package com.ontoseerweb.ontoseer;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.Set;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
 import org.springframework.stereotype.Component;
+
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+
 import kracr.iiitd.ontoseer.Ontoseer;
 
 @Component
 public class client {
 	public String downloadpath="C:/Users/Deeptanshu Barman/Desktop/ontoseer-web/ontoseer/src/downloads/";
    	public Ontoseer instance;
+	public HashMap<String,List<String>> printclassname;
+	public HashMap<String,List<String>> printpropname;
+	public HashMap<String,HashMap<String,String>> printaxiom;
+	public HashMap<String,List<List<String>>> printvocab;
+	public List<List<String>> printodp;
+	public String printvalid;
+	public void clean(String path,String ext){
+		File folder = new File(path);
+        if (folder.exists()) {
+            File[] listAllFiles = folder.listFiles();
+            long Deletion = System.currentTimeMillis() -( 5* 60 *1000L);   // clean files later than 5 min in milisec                       
+            for (File listFile: listAllFiles) {
+                if (listFile.getName().endsWith(ext) &&
+                    listFile.lastModified() < Deletion) {
+                    if (!listFile.delete()) {
+                        System.out.println("Sorry can't delete");
+                    }
+                }
+            }
+        }
+	}
 	public void setpath(String path){
+		clean(downloadpath,".pdf");
 		Ontoseer ins=new Ontoseer();
 		ins.path=path;
 		ins.parseOntology();
@@ -47,17 +73,113 @@ public class client {
         return generatedString;
     }
 	public String getpdf() throws IOException{
-		PDDocument document = new PDDocument();    
-       
-      //Saving the document
-	  String downloadfile=downloadpath+randomfilename()+".pdf";
-      document.save(downloadfile);
-         
-      System.out.println("PDF created");  
-    
-      //Closing the document  
-      document.close();
-	  return downloadfile;
+		String dest =downloadpath+randomfilename()+".pdf";       
+      	PdfWriter writer = new PdfWriter(dest);
+		PdfDocument pdfDoc = new PdfDocument(writer);
+		pdfDoc.addNewPage();
+		Document document = new Document(pdfDoc);
+		String cls="CLASS NAMING RECOMMENDATION";
+		String brk="-------Not Generated-------";
+		Paragraph paragraph1 = new Paragraph(cls);
+		document.add(paragraph1);
+		
+		if (printclassname!=null){
+			float [] pointColumnWidths = {100F, 300F};   
+			Table table = new Table(pointColumnWidths);
+			table.addCell(new Cell().add("Class Name"));       
+			table.addCell(new Cell().add("Recommendation"));
+			for(Map.Entry<String, List<String>> mp : this.printclassname.entrySet()) {
+				table.addCell(new Cell().add(mp.getKey()));
+				table.addCell(new Cell().add(mp.getValue().toString()));
+			}
+			document.add(table);
+		}
+		else{
+			document.add(new Paragraph(brk));
+		}
+		document.add(new Paragraph("PROPERTY NAMING RECOMENDATION"));
+		if (printpropname!=null){
+			float [] pointColumnWidths = {100F, 300F};   
+			Table table = new Table(pointColumnWidths);
+			table.addCell(new Cell().add("Property Name"));       
+			table.addCell(new Cell().add("Recommendation"));
+			for(Map.Entry<String, List<String>> mp : this.printpropname.entrySet()) {
+				table.addCell(new Cell().add(mp.getKey()));
+				table.addCell(new Cell().add(mp.getValue().toString()));
+			}
+			document.add(table);
+		}
+		else{
+			document.add(new Paragraph(brk));
+		}
+		document.add(new Paragraph("ODP RECOMENDATION"));
+		if (printodp!=null){
+			float [] pointColumnWidths = {100F, 200F};   
+			Table table = new Table(pointColumnWidths);
+			table.addCell(new Cell().add("Class/Property Name"));       
+			table.addCell(new Cell().add("IRI"));
+			List<String> name=printodp.get(0);
+			List<String> iri=printodp.get(1);
+			for(int i=0;i<Math.min(name.size(),iri.size());i++){
+				table.addCell(new Cell().add(name.get(i)));       
+				table.addCell(new Cell().add(iri.get(i)));
+			}
+			document.add(table);
+		}
+		else{
+			document.add(new Paragraph(brk));
+		}
+		document.add(new Paragraph("AXIOM RECOMENDATION"));
+		if (printaxiom!=null){
+			float [] pointColumnWidths = {100F,100F,200F};   
+			Table table = new Table(pointColumnWidths);
+			table.addCell(new Cell().add("Class/Property Name"));       
+			table.addCell(new Cell().add("Recommendation"));
+			table.addCell(new Cell().add("IRI"));
+			for(Map.Entry<String, HashMap<String,String>>mp : printaxiom.entrySet()) {
+				System.out.println(mp.getKey());
+				for(Map.Entry<String, String>submp : mp.getValue().entrySet()) {
+					System.out.println("\t+"+submp.getKey()+"\t"+submp.getValue());
+					table.addCell(new Cell().add(mp.getKey()));       
+					table.addCell(new Cell().add(submp.getKey()));
+					table.addCell(new Cell().add(submp.getValue()));
+				}
+			}
+			document.add(table);
+		}
+		else{
+			document.add(new Paragraph(brk));
+		}
+		document.add(new Paragraph("CLASS HEIRARCHY VALIDATION"));
+		if (printvalid!=null){
+			document.add(new Paragraph(printvalid));
+		}
+		else{
+			document.add(new Paragraph(brk));
+		}
+		document.add(new Paragraph("VOCABULARY RECOMMENDATION"));
+		if(printvocab!=null){
+			float [] pointColumnWidths = {100F,100F,200F};   
+			Table table = new Table(pointColumnWidths);
+			table.addCell(new Cell().add("Class/Property Name"));       
+			table.addCell(new Cell().add("Source"));
+			table.addCell(new Cell().add("IRI"));
+			for(Map.Entry<String, List<List<String>>>mp : printvocab.entrySet()){
+				List<String> rec=mp.getValue().get(0);
+				List<String> iri=mp.getValue().get(1);
+				for(int i=0;i<rec.size();i++){
+					table.addCell(new Cell().add(mp.getKey()));       
+					table.addCell(new Cell().add(rec.get(i)));
+					table.addCell(new Cell().add(iri.get(i)));
+				}
+			}
+			document.add(table);
+		}
+		else{
+			document.add(new Paragraph(brk));
+		}
+		document.close();
+		return dest;             
 	}
 
 	public String heirarchyValidation(String q1,String q2,String q3,String q4){
@@ -78,6 +200,7 @@ public class client {
 		instance.argLength=words.length;
 		String b=instance.classHierarchyValidation();
 		System.out.println(b);
+		this.printvalid=b;
 		return b;
 	}
 
@@ -98,6 +221,7 @@ public class client {
 			result.put(words[i],res);
 		}
 		System.out.println(result.size());
+		this.printvocab=result;
 		return result;
 	}
 	
@@ -131,6 +255,7 @@ public class client {
 				System.out.println("\t+"+submp.getKey()+"\t"+submp.getValue());
 			}
 		}
+		this.printaxiom=result;
 		return result;
 	}
 
@@ -158,6 +283,7 @@ public class client {
 			System.out.println(mp.getKey());
 			System.out.println("\t+"+mp.getValue());
 		}
+		this.printpropname=ans;
 		return ans;
 	}
 
@@ -178,6 +304,7 @@ public class client {
 			System.out.println(mp.getKey());
 			System.out.println("\t+"+mp.getValue());
 		}
+		this.printclassname=ans;
 		return ans;
 	}
 
@@ -213,6 +340,7 @@ public class client {
 		// System.out.println("\t1. "+ls1.get(0).toString()+"\n"+"\tIRI: "+ls2.get(0)+"\n"+"\n"+"\t2. "+ls1.get(1).toString()+"\n"+"\tIRI: "+
 		// ls2.get(1)+"\n"+"\n"+"\t3. "+ls1.get(2).toString()+"\n"+"\tIRI: "+ls2.get(2)+"\n"+"\n"+"\t4. "+ls1.get(3).toString()+"\n"+"\tIRI: "+
 		// ls2.get(3));
+		this.printodp=recommendedODP;
 		return recommendedODP;
 	}
 }

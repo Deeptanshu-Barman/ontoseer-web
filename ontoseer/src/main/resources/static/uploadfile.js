@@ -3,7 +3,7 @@ document.getElementById('loader').style.visibility='hidden';
 input.addEventListener('change', () => {
     var filePath = input.value;
     // Allowing file type
-    var allowedExtensions =/(\.owl|\.rdf|\.ttl|\.pdf|\.tex|\.txt|\.rtf|\.wps|\.wks|\.wpd)$/i;
+    var allowedExtensions =/(\.owl|\.rdf)$/i;
     if (!allowedExtensions.exec(filePath)) {
         alert('Invalid file type');
         fileInput.value = '';
