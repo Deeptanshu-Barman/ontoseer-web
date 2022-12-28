@@ -1,0 +1,141 @@
+Prefix(:=<http://www.iiitd.ac.in/winter2019/sweb/cookingrecipe/>)
+Prefix(owl:=<http://www.w3.org/2002/07/owl#>)
+Prefix(rdf:=<http://www.w3.org/1999/02/22-rdf-syntax-ns#>)
+Prefix(xml:=<http://www.w3.org/XML/1998/namespace>)
+Prefix(xsd:=<http://www.w3.org/2001/XMLSchema#>)
+Prefix(rdfs:=<http://www.w3.org/2000/01/rdf-schema#>)
+
+
+Ontology(<http://www.iiitd.ac.in/winter2019/sweb/cookingrecipe/>
+
+Declaration(Class(:CookingUtensil))
+Declaration(Class(:CuisineType))
+Declaration(Class(:Dish))
+Declaration(Class(:EastIndianCuisine))
+Declaration(Class(:Flavor))
+Declaration(Class(:IndianCuisine))
+Declaration(Class(:Ingredient))
+Declaration(Class(:MexicanCuisine))
+Declaration(Class(:NorthIndianCuisine))
+Declaration(Class(:Quantity))
+Declaration(Class(:Recipe))
+Declaration(Class(:SouthIndianCuisine))
+Declaration(Class(:WestIndianCuisine))
+Declaration(ObjectProperty(:hasCookingUtensil))
+Declaration(ObjectProperty(:hasFlavor))
+Declaration(ObjectProperty(:hasIngredient))
+Declaration(DataProperty(:hasCalories))
+Declaration(DataProperty(:hasServingSize))
+Declaration(NamedIndividual(:bitter))
+Declaration(NamedIndividual(:paneerTikkaMasala))
+Declaration(NamedIndividual(:paratha))
+Declaration(NamedIndividual(:raita))
+Declaration(NamedIndividual(:spicy))
+Declaration(NamedIndividual(:sweet))
+Declaration(NamedIndividual(:tangy))
+############################
+#   Object Properties
+############################
+
+# Object Property: :hasCookingUtensil (:hasCookingUtensil)
+
+ObjectPropertyDomain(:hasCookingUtensil :Recipe)
+ObjectPropertyRange(:hasCookingUtensil :CookingUtensil)
+
+# Object Property: :hasFlavor (:hasFlavor)
+
+ObjectPropertyDomain(:hasFlavor :Dish)
+ObjectPropertyRange(:hasFlavor :Flavor)
+
+# Object Property: :hasIngredient (:hasIngredient)
+
+ObjectPropertyDomain(:hasIngredient :Recipe)
+ObjectPropertyRange(:hasIngredient :Ingredient)
+
+
+############################
+#   Data Properties
+############################
+
+# Data Property: :hasCalories (:hasCalories)
+
+DataPropertyDomain(:hasCalories :Dish)
+DataPropertyRange(:hasCalories xsd:double)
+
+# Data Property: :hasServingSize (:hasServingSize)
+
+DataPropertyDomain(:hasServingSize :Dish)
+DataPropertyRange(:hasServingSize xsd:positiveInteger)
+
+
+
+############################
+#   Classes
+############################
+
+# Class: :CookingUtensil (:CookingUtensil)
+
+
+# Class: :EastIndianCuisine (:EastIndianCuisine)
+
+SubClassOf(:EastIndianCuisine :IndianCuisine)
+
+# Class: :Flavor (:Flavor)
+
+EquivalentClasses(:Flavor ObjectOneOf(:bitter :spicy :sweet :tangy))
+
+# Class: :IndianCuisine (:IndianCuisine)
+
+SubClassOf(:IndianCuisine :CuisineType)
+DisjointClasses(:IndianCuisine :MexicanCuisine)
+
+# Class: :MexicanCuisine (:MexicanCuisine)
+
+SubClassOf(:MexicanCuisine :CuisineType)
+
+# Class: :NorthIndianCuisine (:NorthIndianCuisine)
+
+SubClassOf(:NorthIndianCuisine :IndianCuisine)
+
+# Class: :Recipe (:Recipe)
+
+SubClassOf(:Recipe ObjectSomeValuesFrom(:hasCookingUtensil :CookingUtensil))
+SubClassOf(:Recipe ObjectSomeValuesFrom(:hasIngredient :Ingredient))
+
+# Class: :SouthIndianCuisine (:SouthIndianCuisine)
+
+SubClassOf(:SouthIndianCuisine :IndianCuisine)
+
+# Class: :WestIndianCuisine (:WestIndianCuisine)
+
+SubClassOf(:WestIndianCuisine :IndianCuisine)
+
+
+############################
+#   Named Individuals
+############################
+
+# Individual: :bitter (:bitter)
+
+
+# Individual: :paratha (:paratha)
+
+ClassAssertion(:NorthIndianCuisine :paratha)
+
+# Individual: :raita (:raita)
+
+ClassAssertion(:Dish :raita)
+
+# Individual: :spicy (:spicy)
+
+
+# Individual: :sweet (:sweet)
+
+
+# Individual: :tangy (:tangy)
+
+
+
+DisjointClasses(:CookingUtensil :EastIndianCuisine :NorthIndianCuisine :SouthIndianCuisine)
+DifferentIndividuals(:bitter :spicy :sweet :tangy)
+)

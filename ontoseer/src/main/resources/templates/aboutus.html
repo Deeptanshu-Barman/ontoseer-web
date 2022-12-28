@@ -24,50 +24,61 @@
     <a href="https://github.com/kracr/ontoseer-standalone" class="pull-left" target="_blank"><img src="github_image_new.png" style="max-width: 25%"/></a>
 </div>
 <!-- Header -->
-<header class="w3-container w3-orange w3-center" style="padding:128px 16px">
-    <h1 class="w3-jumbo">About OntoSeer</h1>
-    <button class="w3-button w3-black w3-padding-large w3-large w3-margin-top" onclick="custom_scroll1()">About Ontoseer</button>
-    <br><br>
-    <iframe width="600" height="400"
-    src="https://www.youtube.com/embed/8WrgaHixkww#t=2m54s?autoplay=1&mute=1">
-    </iframe>
-    <script src="scroll.js"></script>
-</header>
 
 <!-- First Grid -->
 <div class="w3-row-padding w3-white w3-padding-64 w3-container">
-<div class="w3-content">
     <div class="w3-twothird">
     <h1>About OntoSeer</h1>
-    <h5 class="w3-padding-32 w3-large">While building an ontology, there are several things to consider such as reusing concepts/properties from the existing ontologies, using ontology design patterns (ODPs), following the naming conventions for concepts/properties and designing a good class hierarchy. These are issues that beginner ontology engineers find hard and can be tricky for experienced ones as well. OntoSeer is a Protege plugin that overlooks the ontology that is being built in Protege and offers different types of recommendations</h5>
-
-    <p class="w3-text-grey">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat.</p>
+    <h4 class="w3-padding w3-large">While building an ontology, there are several things to consider such as reusing concepts/properties
+       from the existing ontologies, using ontology design patterns (ODPs), following the naming conventions for concepts/properties and 
+       designing a good class hierarchy. These are issues that beginner ontology engineers find hard and can be tricky for experienced ones 
+       as well. OntoSeer is a Protege plugin that overlooks the ontology that is being built in Protege and offers different types of recommendations</h4>
+    <h4 class="w3-padding w3-large"> Ontoseer Comes with the following features:<br><br><ul>
+      <li>Class naming recommendation</li>
+      <li>Property naming recommendation</li>
+      <li>ODP recommendation</li>
+      <li>Axiom recommendation</li>
+      <li>ClassHeirarchy validation</li>
+      <li>Vocabulary Recommendation</li>
+    </ul></h4>
     </div>
-
     <div class="w3-third w3-center">
-    <i class="fa fa- w3-padding-64 w3-text-red"></i>
+    <i class="w3-padding-64 w3-text-red w3-margin-right">
+      <br><br>
+      <iframe width="500" height="400"
+        src="https://www.youtube.com/embed/8WrgaHixkww#t=2m54s?autoplay=1&mute=1">
+      </iframe>
+    </i>
     </div>
-</div>
 </div>
 
 <!-- Second Grid -->
 <div class="w3-row-padding w3-light-grey w3-padding-64 w3-container">
-<div class="w3-content">
-    <div class="w3-third w3-center">
-    <i class="fa fa-coffee w3-padding-64 w3-text-red w3-margin-right"></i>
-    </div>
-
-    <div class="w3-twothird">
-    <h1>Lorem Ipsum</h1>
-    <h5 class="w3-padding-32">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</h5>
-
-    <p class="w3-text-grey">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-        laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-</div>
+  <table class="table" style="margin-left: 2%;margin-right: 2%;">
+    <style>
+      .table td, .table th {
+          font-size: 15px;
+          border: none;
+      }
+    </style>
+    <tr >
+      <th>Class naming Recommendation</th>
+      <th>Property naming Recommendation</th>
+      <th>ODP Recommendation</th>
+      <th>Axiom Recommendation</th>
+      <th>Class Heirarchy Validation</th>
+      <th>Vocabulary Recommendation</th>
+    </tr>
+    <tr>
+      <td>Class names from LOV and BioPortal and other sites are recommended to the developers.</td>
+      <td>Property names from LOV and BioPortal and other sites are recommended to the developers.</td>
+      <td>OntoSeer interacts with the ontology developer and recommends the Ontology Design Patterns(ODPs).</td>
+      <td>OntoSeer can recommend axioms such as disjointedness among class siblings, and property characteristics, 
+        based on finding a match of the entities (classes, properties) in  ontology with those in the ontology corpus.</td>
+      <td>OntoSeer validates the class hierarchy based on Rigidity, Identity, and Unity properties. </td>
+      <td>Vocabulary names from LOV and BioPortal and other sites are recommended to the developers.</td>
+    </tr>
+  </table>
 </div>
 <footer class="container-footer w-container">
     <div class="w-row">
@@ -81,7 +92,8 @@
             <div class="w-row">
               <div class="w-col w-col-7 w-col-small-6 w-col-tiny-7">
                 <h3 class="footer-titles">Learn</h3>
-                <p class="footer-links"><a href="" target="_blank"><span class="footer-link">Ontology<br></span></a></p>
+                <p class="footer-links"><a href="https://bioportal.bioontology.org/" target="_blank"><span class="footer-link">Bio-Portal<br></span></a>
+                  <a href="http://geneontology.org/docs/download-ontology/" target="_blank"><span class="footer-link">Gene Ontology<br></span></a></p>
               </div>
               <div class="w-col w-col-5 w-col-small-6 w-col-tiny-5">
                 <h3 class="footer-titles">Other</h3>

@@ -25,7 +25,7 @@ fetch('/upload', {
 })
 .then(res => res.json())
 .then(json => getclass(json))
-.catch(err => console.error(err));
+.catch(err => alert("Unable to Process your Ontology"));
 }
 const paste=document.getElementById('pasteform');
 const pasteurl =document.getElementById('pasteurl');
@@ -40,7 +40,7 @@ pasteurl.addEventListener('submit',function(e){
     })
     .then(res => res.json())
     .then(json => getclass(json))
-    .catch(err => console.error(err));
+    .catch(err => alert("Unable to Process your Ontology"));
 })
 paste.addEventListener('submit',function(e){
     document.getElementById('loader').style.visibility='visible';
@@ -53,14 +53,11 @@ paste.addEventListener('submit',function(e){
 })
 .then(res => res.json())
 .then(json => getclass(json))
-.catch(err => console.error(err));
+.catch(err => alert("Unable to Process your Ontology"));
 })
 
 function getclass(json){
     console.log(json);
-    if (json.length==0){
-        alert("Unable to Process your Ontology");
-    }
     let dropdown=document.getElementById("classrecc");
     let option;
     dropdown.innerHTML="";
