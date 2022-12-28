@@ -8,20 +8,26 @@ import java.util.Map;
 import java.util.Random;
 
 import org.springframework.stereotype.Component;
-
+import org.springframework.beans.factory.config.BeanDefinition;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Cell;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import org.springframework.context.annotation.*;
 
 import kracr.iiitd.ontoseer.Ontoseer;
 
 @Component
+@Scope("session")
+// @Scope(value="prototype", proxyMode=ScopedProxyMode.TARGET_CLASS)
 public class client {
 	public String downloadpath="C:/Users/Deeptanshu Barman/Desktop/ontoseer-web/ontoseer/src/downloads/";
    	public Ontoseer instance;
+	public List<String> classlist;
+	public List<String> objectPropertyList;
+	public List<String> dataPropertyList;
 	public HashMap<String,List<String>> printclassname;
 	public HashMap<String,List<String>> printpropname;
 	public HashMap<String,HashMap<String,String>> printaxiom;
@@ -60,11 +66,14 @@ public class client {
 		ins.reClass = new HashMap<>();
 		ins.reProperty = new HashMap<>();
 		instance=ins;
+		this.classlist=Ontoseer.classlist;
+		this.dataPropertyList=Ontoseer.dataPropertyList;
+		this.objectPropertyList=Ontoseer.objectPropertyList;
 		System.out.println("OK");
 	}
 
 	public List<String> getclasslist(){
-		return Ontoseer.classlist;
+		return this.classlist;
 	}
 	public String randomfilename() {
         int leftLimit = 97; // letter 'a'
@@ -236,9 +245,9 @@ public class client {
 	
 	public List<String> getaxiomlist(){
 		List<String> result=new ArrayList<>();
-		result.addAll(Ontoseer.classlist);
-		result.addAll(Ontoseer.objectPropertyList);
-		result.addAll(Ontoseer.dataPropertyList);
+		result.addAll(this.classlist);
+		result.addAll(this.objectPropertyList);
+		result.addAll(this.dataPropertyList);
 		return result;
 	}
 	public HashMap<String,HashMap<String,String>> resultofaxiom(String axioms){
@@ -270,8 +279,8 @@ public class client {
 
 	public List<String> getpropertylist(){
 		List<String> result=new ArrayList<>();
-		result.addAll(Ontoseer.objectPropertyList);
-		result.addAll(Ontoseer.dataPropertyList);
+		result.addAll(this.objectPropertyList);
+		result.addAll(this.dataPropertyList);
 		return result;
 	}
 

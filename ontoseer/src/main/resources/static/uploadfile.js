@@ -58,6 +58,9 @@ paste.addEventListener('submit',function(e){
 
 function getclass(json){
     console.log(json);
+    if(json.length==0){
+        alert("No Classes found. Ontology may not be parsed")
+    }
     let dropdown=document.getElementById("classrecc");
     let option;
     dropdown.innerHTML="";

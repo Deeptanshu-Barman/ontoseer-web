@@ -1,7 +1,7 @@
 package com.ontoseerweb.ontoseer;
+import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ServerProperties.Tomcat.Resource;
-import org.springframework.core.io.InputStreamResource;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileInputStream;
@@ -34,12 +35,17 @@ import java.nio.channels.ReadableByteChannel;
 @Controller
 public class maincontroller {
     private static String UPLOADED_FOLDER = "C:/Users/Deeptanshu Barman/Desktop/ontoseer-web/ontoseer/src/uploads/";
-
+    
     @Autowired
-    public client cli;
+    private WebApplicationContext context;
+
+    public client getcli(){
+        return (client)context.getBean("client");
+    }
 
     @GetMapping("/")
 	public String start(){
+        System.out.println(getcli().hashCode());
 		return "findex";
 	}
     @GetMapping("/about")
@@ -48,7 +54,7 @@ public class maincontroller {
 	}
     @PostMapping("/uploadtext")
     public @ResponseBody List<String> tupload(String pastebin){
-        cli.clean(UPLOADED_FOLDER,".owl");
+        getcli().clean(UPLOADED_FOLDER,".owl");
         String fname=randomfilename()+".owl";
         Path path =Paths.get(UPLOADED_FOLDER+fname);
         byte[] arr = pastebin.getBytes();
@@ -58,13 +64,13 @@ public class maincontroller {
         catch (IOException ex) {
             System.out.print("Invalid Path");
         }
-        cli.setpath(UPLOADED_FOLDER+fname);
+        getcli().setpath(UPLOADED_FOLDER+fname);
         return Collections.emptyList();
     }
     @PostMapping("/uploadurl")
     public @ResponseBody List<String> urlupload(String URL){
         String fname=randomfilename();
-        cli.clean(UPLOADED_FOLDER,".owl");
+        getcli().clean(UPLOADED_FOLDER,".owl");
         File myObj = new File(UPLOADED_FOLDER+fname);
         fname=fname+".owl";
         try{
@@ -72,70 +78,70 @@ public class maincontroller {
         }catch(IOException e){
             e.printStackTrace();
         }
-        cli.setpath(UPLOADED_FOLDER+fname);
+        getcli().setpath(UPLOADED_FOLDER+fname);
         System.out.println(fname);
-        return cli.getclasslist();
+        return getcli().getclasslist();
     }
 	@PostMapping("/upload")
     public @ResponseBody List<String> fileUpload(MultipartFile file) {
-        cli.clean(UPLOADED_FOLDER,".owl");
-        cli.clean(UPLOADED_FOLDER,".rdf");
+        getcli().clean(UPLOADED_FOLDER,".owl");
+        getcli().clean(UPLOADED_FOLDER,".rdf");
         List<String> Class_list=new ArrayList<String>();
         try {
             // create a path from the file name
             Path path = Paths.get(UPLOADED_FOLDER, file.getOriginalFilename());
             Files.write(path, file.getBytes());
-            cli.setpath(UPLOADED_FOLDER+file.getOriginalFilename());
+            getcli().setpath(UPLOADED_FOLDER+file.getOriginalFilename());
         }
         catch (Exception ex) {
             ex.printStackTrace();
             Class_list.add("NA");
-            return cli.getclasslist();
+            return getcli().getclasslist();
         }
-        return cli.getclasslist();
+        return getcli().getclasslist();
     }
     @PostMapping("/cr")
     public @ResponseBody HashMap<String,List<String>> getclassname(String ClassList) {
-        return cli.resultofclass(ClassList);
+        return getcli().resultofclass(ClassList);
     }
     @PostMapping("/pr")
     public @ResponseBody HashMap<String,List<String>> getpropertyname(String reqpropname) {
-        return cli.resultofprop(reqpropname);
+        return getcli().resultofprop(reqpropname);
     }
     @GetMapping("/pr")
     public @ResponseBody List<String> propr(){
-        return cli.getpropertylist();
+        return getcli().getpropertylist();
     }
     @GetMapping("/ar")
     public @ResponseBody List<String> axiomr(){
-        return cli.getaxiomlist();
+        return getcli().getaxiomlist();
     }
     @GetMapping("/vr")
     public @ResponseBody List<String> vocabr(){
-        return cli.getaxiomlist();
+        return getcli().getaxiomlist();
     }
     @PostMapping("/vr")
     public @ResponseBody HashMap<String,List<List<String>>> getavocab(String reqvocab){
-        return cli.resultofvocab(reqvocab);
+        return getcli().resultofvocab(reqvocab);
     }
     @PostMapping("/ar")
     public @ResponseBody HashMap<String,HashMap<String,String>> getaxiom(String reqaxiom){
-        return cli.resultofaxiom(reqaxiom);
+        return getcli().resultofaxiom(reqaxiom);
     }
     @PostMapping("/odp")
     public @ResponseBody List<List<String>> getodp(String ontdesc,String ontdomain,String ontcompetency) {
-        return cli.resultofodp(ontdesc,ontdomain,ontcompetency);
+        return getcli().resultofodp(ontdesc,ontdomain,ontcompetency);
     }
     @PostMapping("/hv")
     public @ResponseBody List<String> gethv(String q1,String q2,String q3,String q4) {
         List<String>ans =new ArrayList<String>();
-        ans.add(cli.heirarchyValidation(q1,q2,q3,q4));
+        ans.add(getcli().heirarchyValidation(q1,q2,q3,q4));
         return ans;
     }
 
     @GetMapping("/download")
     public ResponseEntity downloadFileFromLocal() throws IOException {
-        String fileName=cli.getpdf();
+        String fileName=getcli().getpdf();
         Path path = Paths.get(fileName);
         UrlResource resource = null;
         try {
@@ -171,5 +177,5 @@ public class maincontroller {
         fos.close();
         rbc.close();
     }
-            
+
 }
