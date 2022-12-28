@@ -58,6 +58,11 @@ public class maincontroller {
         }
         catch (IOException ex) {
             System.out.print("Invalid Path");
+            return Collections.emptyList();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return Collections.emptyList();
         }
         getcli().setpath(UPLOADED_FOLDER+fname);
         return getcli().getclasslist();
