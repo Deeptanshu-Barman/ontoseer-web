@@ -1,12 +1,9 @@
 package com.ontoseerweb.ontoseer;
-import org.apache.catalina.core.ApplicationContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,10 +16,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
-import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -65,20 +60,26 @@ public class maincontroller {
             System.out.print("Invalid Path");
         }
         getcli().setpath(UPLOADED_FOLDER+fname);
-        return Collections.emptyList();
+        return getcli().getclasslist();
     }
     @PostMapping("/uploadurl")
     public @ResponseBody List<String> urlupload(String URL){
         String fname=randomfilename();
         getcli().clean(UPLOADED_FOLDER,".owl");
-        File myObj = new File(UPLOADED_FOLDER+fname);
         fname=fname+".owl";
+        new File(UPLOADED_FOLDER+fname);
         try{
             downloadUsingNIO(URL, UPLOADED_FOLDER+fname);
-        }catch(IOException e){
-            e.printStackTrace();
+            getcli().setpath(UPLOADED_FOLDER+fname);
         }
-        getcli().setpath(UPLOADED_FOLDER+fname);
+        catch(FileNotFoundException e){
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+            return Collections.emptyList();
+        }
         System.out.println(fname);
         return getcli().getclasslist();
     }
@@ -100,6 +101,11 @@ public class maincontroller {
         }
         return getcli().getclasslist();
     }
+    @GetMapping("/cr")
+    public @ResponseBody List<String> getclass(){
+        return getcli().getclasslist();
+    }
+
     @PostMapping("/cr")
     public @ResponseBody HashMap<String,List<String>> getclassname(String ClassList) {
         return getcli().resultofclass(ClassList);

@@ -1,5 +1,6 @@
 const input = document.getElementById('file');
 document.getElementById('loader').style.visibility='hidden';
+document.getElementById('loader1').style.visibility='hidden';
 input.addEventListener('change', () => {
     var filePath = input.value;
     // Allowing file type
@@ -55,6 +56,11 @@ paste.addEventListener('submit',function(e){
 .then(json => getclass(json))
 .catch(err => alert("Unable to Process your Ontology"));
 })
+function gcl(){
+    fetch('/cr')
+      .then(res=>res.json())
+      .then(json=>getclass(json))
+  }
 
 function getclass(json){
     console.log(json);

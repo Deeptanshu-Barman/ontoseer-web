@@ -15,6 +15,7 @@ submit.addEventListener('click',()=>{
     .then(json => set_class_output(json))
     .catch(err => console.error(err));
 })
+
   function set_class_output(json){
     let table=document.getElementById('Classtable');
     console.log(json);

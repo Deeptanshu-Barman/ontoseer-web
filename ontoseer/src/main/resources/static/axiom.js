@@ -18,6 +18,7 @@ function getaxiom(){
     const fd = new FormData()
     fd.append('reqaxiom', ans);
     console.log([...fd])
+    document.getElementById('loader1').style.visibility='visible';
     fetch('/ar', {
     method: 'POST',
     body: fd
@@ -41,6 +42,7 @@ function getaxiom(){
     document.multiselect('#axiomrecc').setIsEnabled(true);
   }
   function set_axiom_output(json){
+    document.getElementById('loader1').style.visibility='hidden';
     let table=document.getElementById('axiomtable');
     console.log(json);
     for(let i = 1;i<table.rows.length;){
