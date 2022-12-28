@@ -55,6 +55,7 @@ public class maincontroller {
         byte[] arr = pastebin.getBytes();
         try {
             Files.write(path, arr);
+            getcli().setpath(UPLOADED_FOLDER+fname);
         }
         catch (IOException ex) {
             System.out.print("Invalid Path");
@@ -64,7 +65,6 @@ public class maincontroller {
             e.printStackTrace();
             return Collections.emptyList();
         }
-        getcli().setpath(UPLOADED_FOLDER+fname);
         return getcli().getclasslist();
     }
     @PostMapping("/uploadurl")
