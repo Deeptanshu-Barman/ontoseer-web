@@ -56,7 +56,13 @@ paste.addEventListener('submit',function(e){
 .then(json => getclass(json))
 .catch(err => alert("Unable to Process your Ontology"));
 })
-
+function custom_scroll() {
+    window.scrollBy({ 
+      top: 400, // could be negative value
+      left: 0, 
+      behavior: 'smooth' 
+    });
+  }
 function getclass(json){
     console.log(json);
     if(json.length==0){
@@ -73,6 +79,7 @@ function getclass(json){
     }
     document.getElementById('loader').style.visibility='hidden';
     document.getElementById("defaultresult").click();
+    custom_scroll();
     document.multiselect('#classrecc').destroy();
     document.multiselect('#classrecc').setIsEnabled(true);
 }

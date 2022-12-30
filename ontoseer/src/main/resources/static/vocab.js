@@ -18,6 +18,7 @@ function getvocab(){
     const fd = new FormData()
     fd.append('reqvocab', ans);
     console.log([...fd])
+    document.getElementById('loader1').style.visibility='visible';
     fetch('/vr', {
     method: 'POST',
     body: fd
@@ -62,4 +63,5 @@ function getvocab(){
       }
     }
     console.log("done");
+    document.getElementById('loader1').style.visibility='hidden';
   }
