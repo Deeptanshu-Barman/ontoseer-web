@@ -294,7 +294,7 @@ public class client {
 		String[] words = q.split(" ");
 		instance.arguments=words;
 		instance.argLength=words.length;
-		HashMap<String,List<String>> ans=instance.classNameRecommendation();
+		HashMap<String,List<String>> ans=instance.propertyNameRecommendation();
 		List<String> ans1=new ArrayList<>();
 		for(Map.Entry<String, List<String>> mp : ans.entrySet()) {
 			ans1.add(mp.getKey()+":"+mp.getValue());
@@ -315,7 +315,7 @@ public class client {
 		String[] words = q.split(" ");
 		instance.arguments=words;
 		instance.argLength=words.length;
-		HashMap<String,List<String>> ans=instance.propertyNameRecommendation();
+		HashMap<String,List<String>> ans=instance.classNameRecommendation();
 		List<String> ans1=new ArrayList<>();
 		for(Map.Entry<String, List<String>> mp : ans.entrySet()) {
 			ans1.add(mp.getKey()+":"+mp.getValue());
