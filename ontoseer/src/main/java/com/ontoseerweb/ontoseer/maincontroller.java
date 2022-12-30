@@ -41,6 +41,7 @@ public class maincontroller {
     @GetMapping("/")
 	public String start(){
         System.out.println(getcli().hashCode());
+        getcli().clear();
 		return "findex";
 	}
     @GetMapping("/about")

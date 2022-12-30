@@ -2,6 +2,7 @@ package com.ontoseerweb.ontoseer;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,12 +10,21 @@ import java.util.Random;
 
 import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.config.BeanDefinition;
+
+import com.itextpdf.io.font.FontConstants;
+import com.itextpdf.kernel.color.Color;
+import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.kernel.pdf.action.PdfAction;
 import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.AreaBreak;
 import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.element.Link;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Text;
+
 import org.springframework.context.annotation.*;
 
 import kracr.iiitd.ontoseer.Ontoseer;
@@ -41,6 +51,11 @@ public class client {
 		printvocab=null;
 		printodp=null;
 		printvalid=null;
+	}
+	public void clear(){
+		classlist=null;
+		objectPropertyList=null;
+		dataPropertyList=null;
 	}
 	public void clean(String path,String ext){
 		File folder = new File(path);
@@ -73,7 +88,10 @@ public class client {
 	}
 
 	public List<String> getclasslist(){
-		return this.classlist;
+		if(this.classlist!=null){
+			return this.classlist;
+		}
+		return Collections.emptyList();
 	}
 	public String randomfilename() {
         int leftLimit = 97; // letter 'a'
@@ -99,8 +117,8 @@ public class client {
 		String cls="CLASS NAMING RECOMMENDATION";
 		String brk="-------Not Generated-------";
 		Paragraph paragraph1 = new Paragraph(cls);
+		Text click = new Text("Click here").setFontColor(Color.BLUE).setFont(PdfFontFactory.createFont(FontConstants.HELVETICA_BOLD));
 		document.add(paragraph1);
-		
 		if (printclassname!=null){
 			float [] pointColumnWidths = {100F, 300F};   
 			Table table = new Table(pointColumnWidths);
@@ -111,6 +129,7 @@ public class client {
 				table.addCell(new Cell().add(mp.getValue().toString()));
 			}
 			document.add(table);
+			document.add(new AreaBreak());
 		}
 		else{
 			document.add(new Paragraph(brk));
@@ -126,6 +145,7 @@ public class client {
 				table.addCell(new Cell().add(mp.getValue().toString()));
 			}
 			document.add(table);
+			document.add(new AreaBreak());
 		}
 		else{
 			document.add(new Paragraph(brk));
@@ -139,10 +159,15 @@ public class client {
 			List<String> name=printodp.get(0);
 			List<String> iri=printodp.get(1);
 			for(int i=0;i<Math.min(name.size(),iri.size());i++){
-				table.addCell(new Cell().add(name.get(i)));       
-				table.addCell(new Cell().add(iri.get(i)));
+				table.addCell(new Cell().add(name.get(i)));
+				Paragraph paragraph = new Paragraph();
+				Link chunk = new Link("Click Here",PdfAction.createURI(iri.get(i)));
+				chunk.setFontColor(Color.BLUE);
+				paragraph.add(chunk);    
+				table.addCell(new Cell().add(paragraph));
 			}
 			document.add(table);
+			document.add(new AreaBreak());
 		}
 		else{
 			document.add(new Paragraph(brk));
@@ -160,10 +185,15 @@ public class client {
 					System.out.println("\t+"+submp.getKey()+"\t"+submp.getValue());
 					table.addCell(new Cell().add(mp.getKey()));       
 					table.addCell(new Cell().add(submp.getKey()));
-					table.addCell(new Cell().add(submp.getValue()));
+					Paragraph paragraph = new Paragraph();
+					Link chunk = new Link("Click Here",PdfAction.createURI(submp.getValue()));
+					chunk.setFontColor(Color.BLUE);
+					paragraph.add(chunk); 
+					table.addCell(new Cell().add(paragraph));
 				}
 			}
 			document.add(table);
+			document.add(new AreaBreak());
 		}
 		else{
 			document.add(new Paragraph(brk));
@@ -175,6 +205,7 @@ public class client {
 		else{
 			document.add(new Paragraph(brk));
 		}
+		document.add(new AreaBreak());
 		document.add(new Paragraph("VOCABULARY RECOMMENDATION"));
 		if(printvocab!=null){
 			float [] pointColumnWidths = {100F,100F,200F};   
@@ -188,7 +219,11 @@ public class client {
 				for(int i=0;i<rec.size();i++){
 					table.addCell(new Cell().add(mp.getKey()));       
 					table.addCell(new Cell().add(rec.get(i)));
-					table.addCell(new Cell().add(iri.get(i)));
+					Paragraph paragraph = new Paragraph();
+					Link chunk = new Link("Click Here",PdfAction.createURI(iri.get(i).replace("IRI: ","")));
+					chunk.setFontColor(Color.BLUE);
+					paragraph.add(chunk);
+					table.addCell(new Cell().add(paragraph));
 				}
 			}
 			document.add(table);
@@ -248,7 +283,10 @@ public class client {
 		result.addAll(this.classlist);
 		result.addAll(this.objectPropertyList);
 		result.addAll(this.dataPropertyList);
-		return result;
+		if(!result.isEmpty()){
+			return result;
+		}
+		return Collections.emptyList();
 	}
 	public HashMap<String,HashMap<String,String>> resultofaxiom(String axioms){
 		instance.argIndx=3;
@@ -281,7 +319,10 @@ public class client {
 		List<String> result=new ArrayList<>();
 		result.addAll(this.objectPropertyList);
 		result.addAll(this.dataPropertyList);
-		return result;
+		if(!result.isEmpty()){
+			return result;
+		}
+		return Collections.emptyList();
 	}
 
 	public HashMap <String,List<String>> resultofprop(String property){
@@ -317,11 +358,11 @@ public class client {
 		instance.argLength=words.length;
 		HashMap<String,List<String>> ans=instance.classNameRecommendation();
 		List<String> ans1=new ArrayList<>();
-		for(Map.Entry<String, List<String>> mp : ans.entrySet()) {
-			ans1.add(mp.getKey()+":"+mp.getValue());
-			System.out.println(mp.getKey());
-			System.out.println("\t+"+mp.getValue());
-		}
+		// for(Map.Entry<String, List<String>> mp : ans.entrySet()) {
+		// 	ans1.add(mp.getKey()+":"+mp.getValue());
+		// 	System.out.println(mp.getKey());
+		// 	System.out.println("\t+"+mp.getValue());
+		// }
 		this.printclassname=ans;
 		return ans;
 	}
