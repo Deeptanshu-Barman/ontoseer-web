@@ -3,6 +3,7 @@ odp.addEventListener('submit',function(e){
     e.preventDefault();
     const payload =new FormData(odp);
     console.log([...payload]);
+    document.getElementById('loader1').style.visibility='visible';
     fetch('/odp', {
     method: 'POST',
     body: payload
@@ -31,4 +32,5 @@ function set_odp_output(json){
         }
     }
     console.log("done");
+    document.getElementById('loader1').style.visibility='hidden';
 }

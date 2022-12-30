@@ -18,6 +18,7 @@ function getproperty(){
     const fd = new FormData()
     fd.append('reqpropname', ans);
     console.log([...fd])
+    document.getElementById('loader1').style.visibility='visible';
     fetch('/pr', {
     method: 'POST',
     body: fd
@@ -58,4 +59,5 @@ function getproperty(){
       }
     }
     console.log("done");
+    document.getElementById('loader1').style.visibility='hidden';
   }

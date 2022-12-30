@@ -6,6 +6,7 @@ submit.addEventListener('click',()=>{
   console.log(values);
   const fd = new FormData()
     fd.append('ClassList', values);
+    document.getElementById('loader1').style.visibility='visible';
     console.log([...fd])
     fetch('/cr', {
     method: 'POST',
@@ -34,4 +35,5 @@ submit.addEventListener('click',()=>{
       }
     }
     console.log("done");
+    document.getElementById('loader1').style.visibility='hidden';
   }
